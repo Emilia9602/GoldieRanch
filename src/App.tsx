@@ -1,7 +1,8 @@
+import Shop from "./pages/Shop";
 
 function App() {
   return (
-    <h1>Goldie Ranch</h1>
+    <Shop />
   )
 }
 

@@ -10,9 +10,9 @@ export default function ProductCard({ product }: Props) {
 
             <div className="h-52 w-full overflow-hidden bg-[#F3EFE7]">
                 <img
-                    src={product.image ?? "/public/images/ImageNotAvailable.jpg"}
+                    src={product.image ?? "/images/ImageNotAvailable.jpg"}
                     alt={product.name ? `${product.name} från Goldie Ranch` : "Produktbild"}
-                    className="w-full h-full object-cover" />
+                    className="w-full h-full object-cover object-[50%_30%]" />
             </div>
 
             <h3 className="text-lg font-semibold text-[#3E3A36]">
