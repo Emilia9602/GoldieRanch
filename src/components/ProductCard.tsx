@@ -12,22 +12,24 @@ export default function ProductCard({ product }: Props) {
                 <img
                     src={product.image ?? "/images/ImageNotAvailable.jpg"}
                     alt={product.name ? `${product.name} från Goldie Ranch` : "Produktbild"}
-                    className="w-full h-full object-cover object-[50%_30%]" />
+                    className="w-full h-full object-cover object-center" />
             </div>
 
-            <h3 className="text-lg font-semibold text-[#3E3A36]">
-                {product.name}
-            </h3>
+            <div className="p-3 space-y-1">
+                <h3 className="text-lg font-semibold text-[#3E3A36]">
+                    {product.name}
+                </h3>
 
-            <p className="text-sm text-[#6B625A] leading-relaxed">
-                {product.description}
-            </p>
+                <p className="text-sm text-[#6B625A] leading-relaxed">
+                    {product.description}
+                </p>
 
-            <div className="flex justify-between items-center pt-3 border-t border-[#E5DFD5]">
+                <div className="flex justify-between items-center pt-3 border-t border-[#E5DFD5]">
 
-                <span className="text-[#3E3A36] font-semibold">
-                    {product.price}
-                </span>
+                    <span className="text-[#3E3A36] font-semibold">
+                        {product.price}:-
+                    </span>
+                </div>
             </div>
         </div>
     )
