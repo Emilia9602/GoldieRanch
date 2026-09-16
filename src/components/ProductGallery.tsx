@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { Product } from "../types/product.types"
 
+//Använd denna senare
+
 type Props = {
     product: Product;
 };
