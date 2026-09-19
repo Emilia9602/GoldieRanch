@@ -1,8 +1,8 @@
-import Shop from "./pages/Shop";
+import ComingSoon from "./pages/ComingSoon";
 
 function App() {
   return (
-    <Shop />
+    <ComingSoon />
   )
 }
 
