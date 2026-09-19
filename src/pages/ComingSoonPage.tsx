@@ -1,30 +1,25 @@
-export default function ComingSoon() {
+export default function ComingSoonPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE] text-[#342D26] px-6">
 
             <div className="text-center max-w-lg w-full">
 
-                {/* LOGGA */}
                 <img
                     src="/images/Logga.png"
                     alt="Goldie Ranch logga"
                     className="w-20 h-20 mx-auto mb-3 object-contain rounded-full opacity-90"
                 />
 
-                {/* TITLE */}
                 <h1 className="text-xl tracking-[0.3em] font-semibold">
                     GOLDIE RANCH
                 </h1>
 
-                {/* LINE */}
                 <div className="w-20 h-[3px] mx-auto mt-2 mb-4 bg-gradient-to-r from-transparent via-[#D9BE95] to-transparent opacity-90 rounded-full" />
 
-                {/* STATUS */}
                 <p className="text-sm uppercase tracking-[0.3em] text-[#8C6843] mb-4">
                     Under uppbyggnad
                 </p>
 
-                {/* TEXT */}
                 <p className="text-sm leading-relaxed mb-4">
                     Vi bygger just nu en ny hemsida för Goldie Ranch
                     som även kommer att bli vår nya webbshop.
@@ -36,11 +31,9 @@ export default function ComingSoon() {
                     Tveka inte att höra av dig till oss — vi hjälper gärna till.
                 </p>
 
-                {/* CONTACT */}
                 <div className="space-y-3 text-sm text-[#8C6843] mb-6">
 
                     <div className="flex items-center justify-center gap-2">
-                        {/* mail icon */}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -76,10 +69,8 @@ export default function ComingSoon() {
                     </p>
                 </div>
 
-                {/* SOCIALS */}
                 <div className="flex justify-center items-center gap-6 text-[#8C6843]">
 
-                    {/* Instagram */}
                     <a
                         href="https://instagram.com/goldie.ranch/"
                         target="_blank"
@@ -93,7 +84,6 @@ export default function ComingSoon() {
                         <span>Instagram</span>
                     </a>
 
-                    {/* Facebook */}
                     <a
                         href="https://www.facebook.com/profile.php?id=100093571345152"
                         target="_blank"
@@ -105,7 +95,6 @@ export default function ComingSoon() {
                         <span>Facebook</span>
                     </a>
 
-                    {/* TikTok */}
                     <a
                         href="https://tiktok.com/@goldieranch"
                         target="_blank"

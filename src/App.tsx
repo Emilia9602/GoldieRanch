@@ -1,8 +1,8 @@
-import ComingSoon from "./pages/ComingSoon";
+import ComingSoonPage from "./pages/ComingSoonPage";
 
 function App() {
   return (
-    <ComingSoon />
+    <ComingSoonPage />
   )
 }
 
