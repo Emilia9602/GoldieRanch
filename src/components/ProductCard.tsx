@@ -16,17 +16,17 @@ export default function ProductCard({ product }: Props) {
             </div>
 
             <div className="p-3 space-y-1 flex flex-col flex-1">
-                <h3 className="text-lg font-semibold text-[#3E3A36]">
+                <h3 className="text-lg font-semibold text-[#342D26]">
                     {product.name}
                 </h3>
 
-                <p className="text-sm text-[#6B625A] leading-relaxed">
+                <p className="text-sm text-[#6B5D48] leading-relaxed">
                     {product.description}
                 </p>
 
-                <div className="flex justify-between items-center pt-3 border-t border-[#E5DFD5] mt-auto">
+                <div className="flex justify-between items-center pt-3 border-t border-[#D9BE95]/40 mt-auto">
 
-                    <span className="text-[#3E3A36] font-semibold">
+                    <span className="text-[#342D26] font-semibold">
                         {product.price} kr
                     </span>
                 </div>

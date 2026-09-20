@@ -8,15 +8,20 @@ export default function Shop() {
     if (error) return <p className="p-6">Något gick fel</p>;
 
     return (
-        <div className="min-h-screen bg-[#FAF7F2] p-6">
-            <h1 className="text-3xl font-semibold text-[#3E3A36] mb-6">
-                Produkter
-            </h1>
+        <div className="min-h-screen bg-[#FAF6EE] p-6 text-[#342D26]">
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                {products?.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                ))}
+            <div className="max-w-6xl mx-auto">
+
+                <h1 className="text-3xl font-semibold text-[#342D26] mb-6">
+                    Produkter
+                </h1>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                    {products?.map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                    ))}
+                </div>
+
             </div>
         </div>
     )
