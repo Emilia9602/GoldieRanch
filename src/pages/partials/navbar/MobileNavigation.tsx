@@ -5,7 +5,13 @@ export default function MobileNavigation() {
     const [open, setOpen] = useState(false);
 
     const location = useLocation();
-    const isActive = (path) => location.pathname === path;
+    const isActive = (path: string) => location.pathname === path;
+
+    const quickLinkClass = (path: string) =>
+        `flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-colors ${isActive(path)
+            ? "bg-[#D9BE95] border-[#C8A97E] text-[#342D26] shadow-sm"
+            : "bg-[#FAF7F2] border-[#E5DFD5] text-[#342D26] hover:bg-[#D9BE95]/30"
+        }`;
 
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "auto";
@@ -124,7 +130,7 @@ export default function MobileNavigation() {
                             <Link
                                 to="/"
                                 onClick={closeMenu}
-                                className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-[#FAF7F2] border border-[#E5DFD5] text-[#342D26] hover:bg-[#D9BE95]/30 transition-colors"
+                                className={quickLinkClass("/")}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +155,7 @@ export default function MobileNavigation() {
                             <Link
                                 to="/shop"
                                 onClick={closeMenu}
-                                className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-[#D9BE95] border border-[#C8A97E] text-[#342D26] shadow-sm hover:bg-[#CFB58C] transition-colors"
+                                className={quickLinkClass("/shop")}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +180,7 @@ export default function MobileNavigation() {
                             <Link
                                 to="/contact"
                                 onClick={closeMenu}
-                                className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-[#FAF7F2] border border-[#E5DFD5] text-[#342D26] hover:bg-[#D9BE95]/30 transition-colors"
+                                className={quickLinkClass("/contact")}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
