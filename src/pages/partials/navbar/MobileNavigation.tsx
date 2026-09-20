@@ -40,7 +40,7 @@ export default function MobileNavigation() {
                             className="w-9 h-9 object-contain rounded-full"
                         />
 
-                        <span className="text-[11px] uppercase tracking-[0.3em] font-semibold text-[#3E3A36] group-hover:text-[#6F4E2E] transition-colors">
+                        <span className="text-[11px] uppercase tracking-[0.3em] font-semibold text-[#6F5D48] group-hover:text-[#6F4E2E] transition-colors">
                             GOLDIE RANCH
                         </span>
                     </Link>

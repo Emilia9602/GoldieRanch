@@ -5,7 +5,7 @@ export default function DesktopNavbar() {
     const isActive = (path: string) => location.pathname === path;
 
     const base =
-        "relative text-[12px] uppercase tracking-[0.2em] font-semibold text-[#6B625A] transition-all duration-200 hover:text-[#342D26] hover:scale-105 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-[#D9BE95] after:transition-all";
+        "relative text-[12px] uppercase tracking-[0.2em] font-semibold text-[#6B625A] transition-all duration-200 hover:text-[#342D26] hover:scale-105 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-[#D9BE95] after:transition-all";
 
     const linkStyle = (active: boolean) =>
         `${base} ${active
@@ -24,7 +24,7 @@ export default function DesktopNavbar() {
                         className="w-10 h-10 object-contain rounded-full transition-transform duration-300"
                     />
 
-                    <span className="relative inline-blocktext-[12px] uppercase tracking-[0.3em] font-semibold text-[#3E3A36] transition-colors duration-300 group-hover:text-[#6F4E2E] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[1px] after:bg-[#6F4E2E] after:transition-all hover:after:w-full hover:-translate-y-[1px]">
+                    <span className="relative inline-block text-[12px] uppercase tracking-[0.3em] font-semibold text-[#6F5D48] transition-colors duration-300 group-hover:text-[#6F4E2E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#D9BE95] after:transition-all after:duration-300 hover:after:w-full hover:-translate-y-[1px]">
                         GOLDIE RANCH
                     </span>
                 </Link>
