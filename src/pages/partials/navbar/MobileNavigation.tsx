@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function MobileNavigation() {
     const [open, setOpen] = useState(false);
+
+    const location = useLocation();
+    const isActive = (path) => location.pathname === path;
 
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "auto";
@@ -227,6 +230,11 @@ export default function MobileNavigation() {
                         <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
                             Hem
                         </span>
+
+                        <div
+                            className={`mt-1 h-[2px] w-5 rounded-full transition-all duration-300 ${isActive("/") ? "bg-[#D9BE95]" : "bg-transparent"
+                                }`}
+                        />
                     </Link>
 
                     <Link
@@ -236,6 +244,11 @@ export default function MobileNavigation() {
                         <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
                             Shop
                         </span>
+
+                        <div
+                            className={`mt-1 h-[2px] w-5 rounded-full transition-all duration-300 ${isActive("/shop") ? "bg-[#D9BE95]" : "bg-transparent"
+                                }`}
+                        />
                     </Link>
 
                     <Link
@@ -245,6 +258,11 @@ export default function MobileNavigation() {
                         <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
                             Kontakt
                         </span>
+
+                        <div
+                            className={`mt-1 h-[2px] w-5 rounded-full transition-all duration-300 ${isActive("/contact") ? "bg-[#D9BE95]" : "bg-transparent"
+                                }`}
+                        />
                     </Link>
 
                     <button
@@ -253,9 +271,7 @@ export default function MobileNavigation() {
                         className="flex flex-col items-center justify-center min-w-[44px] text-[#342D26]"
                     >
                         <div className="w-7 h-7 rounded-lg bg-[#D9BE95]/50 border border-[#C8A97E] flex items-center justify-center">
-                            <span className="text-base leading-none">
-                                ☰
-                            </span>
+                            <span className="text-base leading-none">☰</span>
                         </div>
 
                         <span className="text-[9px] uppercase font-bold tracking-wider mt-0.5">
