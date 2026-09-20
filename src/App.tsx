@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import ShopPage from "./pages/ShopPage";
-import Navbar from "./pages/partials/Navbar";
+import Navbar from "./pages/partials/navbar/Navbar";
 
 function App() {
   return (

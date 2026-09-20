@@ -8,7 +8,7 @@ export default function Shop() {
     if (error) return <p className="p-6">Något gick fel</p>;
 
     return (
-        <div className="min-h-screen bg-[#FAF6EE] p-6 text-[#342D26]">
+        <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 md:pb-6 text-[#342D26]">
 
             <div className="max-w-6xl mx-auto">
 
