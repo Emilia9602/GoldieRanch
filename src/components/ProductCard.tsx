@@ -27,7 +27,7 @@ export default function ProductCard({ product }: Props) {
                 <div className="flex justify-between items-center pt-3 border-t border-[#E5DFD5] mt-auto">
 
                     <span className="text-[#3E3A36] font-semibold">
-                        {product.price}:-
+                        {product.price} kr
                     </span>
                 </div>
             </div>
