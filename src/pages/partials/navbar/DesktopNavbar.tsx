@@ -1,8 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function DesktopNavbar() {
-    const linkStyle =
-        "relative text-[12px] uppercase tracking-[o.2em] font-semibold text-[#6B625A] hover:text-[#6F4E2E] transition after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[1px] after:bg-[#6F4E2E] after:transition-all hover:after:w-full hover:-translate-y-[1px]";
+    const location = useLocation();
+    const isActive = (path: string) => location.pathname === path;
+
+    const base =
+        "relative text-[12px] uppercase tracking-[0.2em] font-semibold text-[#6B625A] transition-all duration-200 hover:text-[#342D26] hover:scale-105 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-[#D9BE95] after:transition-all";
+
+    const linkStyle = (active: boolean) =>
+        `${base} ${active
+            ? "text-[#342D26] after:w-full"
+            : "text-[#6B625A] hover:text-[#342D26] after:w-0 hover:after:w-full"
+        }`;
 
     return (
         <nav className="w-full border-b border-[#E5DFD5] bg-[#FAF7F2]/80 backdrop-blur-md sticky top-0 z-50">
@@ -22,15 +31,15 @@ export default function DesktopNavbar() {
 
                 <div className="hidden md:flex items-center gap-6 text-sm text-[#6B625A]">
 
-                    <Link to="/" className={linkStyle}>
+                    <Link to="/" className={linkStyle(isActive("/"))}>
                         Hem
                     </Link>
 
-                    <Link to="/shop" className={linkStyle}>
+                    <Link to="/shop" className={linkStyle(isActive("/shop"))}>
                         Shop
                     </Link>
 
-                    <Link to="/contact" className={linkStyle}>
+                    <Link to="/contact" className={linkStyle(isActive("/contact"))}>
                         Kontakt
                     </Link>
                 </div>
