@@ -27,7 +27,7 @@ export default function MobileNavigation() {
 
     return (
         <>
-            <header className="md:hidden sticky top-0 z-40 w-full border-b border-[#E5DFD5] bg-[#FAF7F2]/90 backdrop-blur-md">
+            <header className="md:hidden sticky top-0 z-40 w-full border-b border-[#D9BE95]/60 bg-[#FAF7F2]/90 backdrop-blur-md">
                 <div className="px-4 py-3 flex items-center gap-3">
 
                     <Link

@@ -14,7 +14,7 @@ export default function DesktopNavbar() {
         }`;
 
     return (
-        <nav className="w-full border-b border-[#E5DFD5] bg-[#FAF7F2]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="w-full border-b border-[#D9BE95]/60 bg-[#FAF7F2]/80 backdrop-blur-md sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
                 <Link to="/" className="flex items-center gap-3 group relative">

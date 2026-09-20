@@ -6,7 +6,7 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
     return (
-        <div className="bg-[#FAF7F2] border border-[#E5DFD5] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition h-full flex flex-col">
+        <div className="bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition h-full flex flex-col">
 
             <div className="h-52 w-full overflow-hidden bg-[#F3EFE7]">
                 <img
@@ -24,7 +24,7 @@ export default function ProductCard({ product }: Props) {
                     {product.description}
                 </p>
 
-                <div className="flex justify-between items-center pt-3 border-t border-[#D9BE95]/40 mt-auto">
+                <div className="flex justify-between items-center pt-3 border-t border-[#D9BE95]/50 mt-auto">
 
                     <span className="text-[#342D26] font-semibold">
                         {product.price} kr
