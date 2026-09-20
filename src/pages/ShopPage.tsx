@@ -10,7 +10,7 @@ export default function Shop() {
     return (
         <div className="min-h-screen bg-[#FAF7F2] p-6">
             <h1 className="text-3xl font-semibold text-[#3E3A36] mb-6">
-                Goldie Ranch
+                Produkter
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
