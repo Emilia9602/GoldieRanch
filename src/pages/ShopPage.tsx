@@ -8,15 +8,23 @@ export default function Shop() {
     if (error) return <p className="p-6">Något gick fel</p>;
 
     return (
-        <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 md:pb-6 text-[#342D26]">
+        <div className="min-h-screen bg-[#FAF6EE] pt-10 pb-24 md:pb-10 text-[#342D26]">
 
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-5xl mx-auto px-4">
 
-                <h1 className="text-3xl font-semibold text-[#342D26] mb-6">
-                    Produkter
-                </h1>
+                <div className="text-center mb-10">
+                    <span className="block text-[10px] uppercase tracking-[0.35em] text-[#8C6843]">
+                        Utforska sortimentet
+                    </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                    <h2 className="text-2xl font-semibold text-[#342D26] mt-2">
+                        Produkter
+                    </h2>
+
+                    <div className="mt-3 w-16 h-[2px] bg-[#D9BE95] rounded-full mx-auto" />
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {products?.map((p) => (
                         <ProductCard key={p.id} product={p} />
                     ))}
