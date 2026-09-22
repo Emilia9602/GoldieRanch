@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../services/auth";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
@@ -10,6 +12,13 @@ export default function AdminPage() {
 
         console.log({ name, description, price });
     }
+
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await signOut();
+        navigate("/login"); // skickar tillbaka direkt
+    };
 
     return (
         <div className="min-h-screen bg-[#FAF6EE] p-6 text-[#342D26]">
@@ -51,6 +60,13 @@ export default function AdminPage() {
                     </button>
                 </form>
             </div>
+
+            <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg bg-red-500 text-white"
+            >
+                Logga ut
+            </button>
         </div>
     )
 }
