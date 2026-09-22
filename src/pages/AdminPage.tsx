@@ -26,14 +26,14 @@ export default function AdminPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Produktnamn"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] text-sm"
                     />
 
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Beskrivning"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] text-sm"
                     />
 
                     <input
@@ -41,7 +41,7 @@ export default function AdminPage() {
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Pris"
                         type="number"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] text-sm"
                     />
 
                     <button
