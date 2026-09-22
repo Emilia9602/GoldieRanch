@@ -6,7 +6,7 @@ type Props = {
 };
 
 export default function ProtectedRoute({ children }: Props) {
-    const { user, loading } = useAuth();
+    const { user, role, loading } = useAuth();
 
     if (loading) {
         return <p className="p-6">Laddar...</p>;
@@ -16,5 +16,9 @@ export default function ProtectedRoute({ children }: Props) {
         return <Navigate to="/login" replace />;
     }
 
-    return <>{children}</>;
+    if (role !== "admin") {
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
 }

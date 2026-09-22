@@ -8,11 +8,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [loading, setLoading] = useState(true);
+    const [role, setRole] = useState<string | null>(null);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data }) => {
             setSession(data.session);
             setUser(data.session?.user ?? null);
+            setRole(data.session?.user?.app_metadata?.role ?? null);
             setLoading(false);
         });
 
@@ -20,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             (_event, session) => {
                 setSession(session);
                 setUser(session?.user ?? null);
+                setRole(session?.user?.app_metadata?.role ?? null);
             }
         );
 
@@ -34,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 user,
                 session,
                 loading,
+                role,
                 signIn,
                 signOut,
             }}
