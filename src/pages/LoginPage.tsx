@@ -31,7 +31,7 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-start justify-center bg-[#FAF6EE] px-4 pt-20 overflow-hidden">
-            <div className="w-full max-w-md bg-[#FAF7F2] border border-[#E5DFD5] rounded-2xl shadow-sm p-6">
+            <div className="w-full max-w-md bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl shadow-sm p-6">
 
                 <div className="text-center mb-6">
                     <h1 className="text-xl font-semibold text-[#342D26]">
@@ -52,7 +52,7 @@ export default function LoginPage() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-[#E5DFD5] bg-[#FAF6EE] text-[#342D26] text-sm outline-none focus:border-[#D9BE95]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-[#342D26] text-sm outline-none focus:border-[#D9BE95]"
                     />
 
                     <input
@@ -60,7 +60,7 @@ export default function LoginPage() {
                         placeholder="Lösenord"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-[#E5DFD5] bg-[#FAF6EE] text-[#342D26] text-sm outline-none focus:border-[#D9BE95]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-[#342D26] text-sm outline-none focus:border-[#D9BE95]"
                     />
 
                     {error && (
