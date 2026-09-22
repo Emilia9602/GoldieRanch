@@ -6,7 +6,7 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
     return (
-        <div className="bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition h-full flex flex-col">
+        <div className="bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-xl overflow-hidden shadow-md hover:shadow-md transition h-full flex flex-col">
 
             <div className="h-52 w-full overflow-hidden bg-[#F3EFE7]">
                 <img

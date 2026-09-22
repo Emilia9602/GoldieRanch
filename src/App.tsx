@@ -4,6 +4,8 @@ import ShopPage from "./pages/ShopPage";
 import Navbar from "./pages/partials/navbar/Navbar";
 import LoginPage from "./pages/LoginPage";
 
+//Lägg till sök på desktop
+
 function App() {
   return (
     <BrowserRouter>

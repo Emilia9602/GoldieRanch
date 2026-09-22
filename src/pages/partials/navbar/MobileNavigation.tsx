@@ -45,7 +45,7 @@ export default function MobileNavigation() {
                         </span>
                     </Link>
 
-                    <div className="flex-1 flex items-center gap-2 h-9 px-3 rounded-xl border border-[#E5DFD5] bg-[#FAF6EE] text-[#6B625A]">
+                    <div className="flex-1 flex items-center gap-2 h-9 px-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-[#6B625A]">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
