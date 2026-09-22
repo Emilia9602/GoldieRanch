@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import ShopPage from "./pages/ShopPage";
 import Navbar from "./pages/partials/navbar/Navbar";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
 
         {/*Jobbar på just nu*/}
         <Route path="/shop" element={<ShopPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   )
