@@ -6,7 +6,6 @@ import LoginPage from "./pages/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminPage from "./pages/AdminPage";
-import AuthListener from "./context/AuthListener";
 
 //Lägg till sök på desktop
 
