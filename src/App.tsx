@@ -5,13 +5,15 @@ import Navbar from "./pages/partials/navbar/Navbar";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminPage from "./pages/AdminPage";
+import AuthListener from "./context/AuthListener";
 
 //Lägg till sök på desktop
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
 
         <Navbar />
 
@@ -25,12 +27,12 @@ function App() {
 
           <Route path="/admin" element={
             <ProtectedRoute>
-              <p>Admin här</p>
+              <AdminPage />
             </ProtectedRoute>
           } />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

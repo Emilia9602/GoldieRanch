@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../services/auth";
+import { useAuth } from "../hooks/useAuth";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -8,16 +9,22 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    useEffect(() => {
+        if (!authLoading && user) {
+            navigate("/admin");
+        }
+    }, [user, authLoading, navigate]);
+
+    const handleLogin = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
             await signIn(email, password);
-            navigate("/admin");
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message);
