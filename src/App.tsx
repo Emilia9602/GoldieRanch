@@ -3,24 +3,27 @@ import ComingSoonPage from "./pages/ComingSoonPage";
 import ShopPage from "./pages/ShopPage";
 import Navbar from "./pages/partials/navbar/Navbar";
 import LoginPage from "./pages/LoginPage";
+import { AuthProvider } from "./context/AuthProvider";
 
 //Lägg till sök på desktop
 
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
 
-      <Navbar />
+        <Navbar />
 
-      <Routes>
+        <Routes>
 
-        <Route path="/" element={<ComingSoonPage />} />
+          <Route path="/" element={<ComingSoonPage />} />
 
-        {/*Jobbar på just nu*/}
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
-    </BrowserRouter>
+          {/*Jobbar på just nu*/}
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
