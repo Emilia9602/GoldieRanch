@@ -17,7 +17,7 @@ export default function AdminPage() {
 
     const handleLogout = async () => {
         await signOut();
-        navigate("/login"); // skickar tillbaka direkt
+        navigate("/login");
     };
 
     return (
