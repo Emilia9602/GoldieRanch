@@ -8,6 +8,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminPage from "./pages/AdminPage";
 
 //Lägg till sök på desktop
+//Kolla hover på admin lägg till knapp, som ska va samma överalltF
 
 function App() {
   return (
