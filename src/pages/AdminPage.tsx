@@ -83,7 +83,7 @@ export default function AdminPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 rounded-xl bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold">
+                        className="w-full py-3 rounded-xl bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[#E5DFD5]">
                         {loading ? "Sparar" : "Lägg till produkt"}
                     </button>
                 </form>
