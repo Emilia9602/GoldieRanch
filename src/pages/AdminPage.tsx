@@ -1,16 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../services/auth";
+import { addProduct } from "../services/productService";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
+    const [image, setImage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
+        setLoading(true);
 
-        console.log({ name, description, price });
+        try {
+            await addProduct({
+                name, description, price: price ? Number(price) : null, image: image || null,
+            });
+
+            setName("");
+            setDescription("");
+            setPrice("");
+            setImage("");
+
+            alert("Skapad");
+        } catch (err) {
+            console.log(err);
+            alert("Gick fel")
+        } finally {
+            setLoading(false);
+        }
     }
 
     const navigate = useNavigate();
@@ -26,7 +46,7 @@ export default function AdminPage() {
 
                 <h1 className="text-xl font-semibold mb-1">Admin</h1>
                 <p className="text-xs uppercase tracking-[0.25em] text-[#8C6843] mb-6">
-                    Lägg till produkter
+                    Lägg till produkt
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -53,10 +73,18 @@ export default function AdminPage() {
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] text-sm"
                     />
 
+                    <input
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                        placeholder="Bild URL"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] text-sm"
+                    />
+
                     <button
                         type="submit"
+                        disabled={loading}
                         className="w-full py-3 rounded-xl bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold">
-                        Lägg till produkt
+                        {loading ? "Sparar" : "Lägg till produkt"}
                     </button>
                 </form>
             </div>
