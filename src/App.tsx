@@ -20,6 +20,7 @@ import EditProductPage from "./pages/EditProductPage";
 //Hur loggar vi in?
 //Kontakt sida
 //Anpassa lägg till till desktop
+//Ändra så att adminpage inte ha lägg till som första?
 
 function App() {
   return (

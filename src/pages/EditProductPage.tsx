@@ -42,7 +42,7 @@ export default function EditProductPage() {
                     <input
                         value={product.name ?? ""}
                         onChange={(e) => setProduct({ ...product, name: e.target.value })}
-                        className="w-full mb-3 px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Namn"
                     />
                 </div>
@@ -55,7 +55,7 @@ export default function EditProductPage() {
                     <textarea
                         value={product.description ?? ""}
                         onChange={(e) => setProduct({ ...product, description: e.target.value })}
-                        className="w-full mb-3 px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Beskrivning"
                     />
                 </div>
@@ -66,9 +66,10 @@ export default function EditProductPage() {
                     </label>
 
                     <input
+                        type="number"
                         value={product.price ?? ""}
                         onChange={(e) => setProduct({ ...product, price: Number(e.target.value) })}
-                        className="w-full mb-3 px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Pris"
                     />
                 </div>
@@ -81,14 +82,14 @@ export default function EditProductPage() {
                     <input
                         value={product.image ?? ""}
                         onChange={(e) => setProduct({ ...product, image: e.target.value })}
-                        className="w-full mb-4 px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
+                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Bild URL"
                     />
                 </div>
 
                 <button
                     onClick={handleSave}
-                    className="w-full py-3 rounded-xl bg-[#D9BE95] font-semibold">
+                    className="w-full py-3 rounded-xl bg-[#D9BE95] border border-[#C8A97E] font-semibold hover:bg-[#CFB58C] transition">
                     Spara ändringar
                 </button>
             </div>
