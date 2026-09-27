@@ -68,34 +68,58 @@ export default function AdminPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
 
-                    <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Produktnamn"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                    />
+                    <div className="mb-3">
+                        <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
+                            Produktnamn
+                        </label>
 
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Beskrivning"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                    />
+                        <input
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Produktnamn"
+                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                        />
+                    </div>
 
-                    <input
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        placeholder="Pris"
-                        type="number"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                    />
+                    <div className="mb-3">
+                        <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
+                            Beskrivning
+                        </label>
 
-                    <input
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                        placeholder="Bild URL"
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                    />
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Beskrivning"
+                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
+                            Pris
+                        </label>
+
+                        <input
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="Pris"
+                            type="number"
+                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
+                            Bild
+                        </label>
+
+                        <input
+                            value={image}
+                            onChange={(e) => setImage(e.target.value)}
+                            placeholder="Bild URL"
+                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                        />
+                    </div>
 
                     <button
                         type="submit"
