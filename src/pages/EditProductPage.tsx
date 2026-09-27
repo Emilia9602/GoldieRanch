@@ -34,10 +34,16 @@ export default function EditProductPage() {
         }
     }
 
-    if (!product) return <p>Laddar...</p>
+    if (!product) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
+                <p className="text-sm text-[#8C6843]">Laddar produkt...</p>
+            </div>
+        )
+    }
 
     return (
-        <div className="min-h-screen bg-[#FAF6EE] p-6">
+        <div className="pb-24 bg-[#FAF6EE] p-6">
             <div className="max-w-xl mx-auto bg-[#FAF7F2] p-6 rounded-2xl border border-[#D9BE95]/50">
 
                 <h1 className="text-lg font-semibold mb-1">
@@ -105,7 +111,6 @@ export default function EditProductPage() {
                 </div>
 
                 <button
-                    type="submit"
                     disabled={loading}
                     onClick={handleSave}
                     className="w-full mt-3 py-3 rounded-xl bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:bg-[#EAE4D9] disabled:text-[#A89F94] disabled:border-[#D9BE95]/30 disabled:cursor-not-allowed disabled:shadow-none">

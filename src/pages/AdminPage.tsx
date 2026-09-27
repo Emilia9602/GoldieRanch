@@ -25,7 +25,7 @@ export default function AdminPage() {
         }
 
         loadProducts();
-    })
+    }, []);
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
@@ -58,7 +58,7 @@ export default function AdminPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#FAF6EE] p-6 text-[#342D26]">
+        <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 text-[#342D26]">
             <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
 
                 <h1 className="text-xl font-semibold mb-1">
