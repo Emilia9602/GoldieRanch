@@ -1,5 +1,5 @@
 import { supabase } from "../lib/supabase";
-import type { Product, ProductInsert } from "../types/product.types";
+import type { Product, ProductInsert, ProductUpdate } from "../types/product.types";
 
 export async function getProducts(): Promise<Product[]> {
     const { data, error } = await supabase
@@ -20,5 +20,28 @@ export async function addProduct(product: ProductInsert) {
 
     if (error) throw error;
 
+    return data;
+}
+
+export async function getProductById(id: number) {
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) throw error;
+    return data;
+}
+
+export async function updateProduct(id: number, update: ProductUpdate) {
+    const { data, error } = await supabase
+        .from("products")
+        .update(update)
+        .eq("id", id)
+        .select()
+        .single();
+
+    if (error) throw error;
     return data;
 }

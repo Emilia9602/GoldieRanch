@@ -10,7 +10,6 @@ export default function AdminPage() {
     const [price, setPrice] = useState("");
     const [image, setImage] = useState("");
     const [loading, setLoading] = useState(false);
-
     const [latestProducts, setLatestProducts] = useState<Product[]>([]);
 
     useEffect(() => {
