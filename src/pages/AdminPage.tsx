@@ -61,7 +61,9 @@ export default function AdminPage() {
         <div className="min-h-screen bg-[#FAF6EE] p-6 text-[#342D26]">
             <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
 
-                <h1 className="text-xl font-semibold mb-1">Admin</h1>
+                <h1 className="text-xl font-semibold mb-1">
+                    Admin
+                </h1>
                 <p className="text-xs uppercase tracking-[0.25em] text-[#8C6843] mb-6">
                     Lägg till produkt
                 </p>

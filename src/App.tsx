@@ -21,6 +21,8 @@ import EditProductPage from "./pages/EditProductPage";
 //Kontakt sida
 //Anpassa lägg till till desktop
 //Ändra så att adminpage inte ha lägg till som första?
+//Error, loading state bättre, annat än alerts
+//Not found page
 
 function App() {
   return (

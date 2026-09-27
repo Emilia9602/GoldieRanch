@@ -20,8 +20,13 @@ export default function EditProductPage() {
     const handleSave = async () => {
         if (!product) return;
 
-        await updateProduct(product.id!, product);
-        alert("Uppdaterad");
+        try {
+            await updateProduct(product.id!, product);
+            alert("Uppdaterad");
+        } catch (err) {
+            console.log(err);
+            alert("Kunde ej spara");
+        }
     }
 
     if (!product) return <p>Laddar...</p>
@@ -30,9 +35,12 @@ export default function EditProductPage() {
         <div className="min-h-screen bg-[#FAF6EE] p-6">
             <div className="max-w-xl mx-auto bg-[#FAF7F2] p-6 rounded-2xl border border-[#D9BE95]/50">
 
-                <h1 className="text-lg font-semibold mb-4">
-                    Redigera produkt
+                <h1 className="text-lg font-semibold mb-1">
+                    Admin
                 </h1>
+                <p className="text-xs uppercase tracking-[0.25em] text-[#8C6843] mb-6">
+                    Redigera produkt
+                </p>
 
                 <div className="mb-3">
                     <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
