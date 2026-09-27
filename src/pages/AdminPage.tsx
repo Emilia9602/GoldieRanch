@@ -139,7 +139,7 @@ export default function AdminPage() {
                 Logga ut
             </button>
 
-            <div className="mt-6">
+            <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
                 <h2 className="text-sm uppercase tracking-wider text-[#8C6843] mb-3">
                     Senaste tillagda produkter
                 </h2>
@@ -169,7 +169,7 @@ export default function AdminPage() {
 
                             <button
                                 onClick={() => navigate(`/admin/products/${p.id}`)}
-                                className="text-xs px-3 py-1 rounded-lg border border-[#D9BE95]/50 hover:bg-[#D9BE95]/20">
+                                className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C]">
                                 Redigera
                             </button>
                         </div>

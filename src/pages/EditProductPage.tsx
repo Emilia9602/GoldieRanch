@@ -6,6 +6,7 @@ import { getProductById, updateProduct } from "../services/productService";
 export default function EditProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -20,12 +21,16 @@ export default function EditProductPage() {
     const handleSave = async () => {
         if (!product) return;
 
+        setLoading(true);
+
         try {
             await updateProduct(product.id!, product);
             alert("Uppdaterad");
         } catch (err) {
             console.log(err);
             alert("Kunde ej spara");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -49,6 +54,7 @@ export default function EditProductPage() {
 
                     <input
                         value={product.name ?? ""}
+                        disabled={loading}
                         onChange={(e) => setProduct({ ...product, name: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Namn"
@@ -62,6 +68,7 @@ export default function EditProductPage() {
 
                     <textarea
                         value={product.description ?? ""}
+                        disabled={loading}
                         onChange={(e) => setProduct({ ...product, description: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Beskrivning"
@@ -76,6 +83,7 @@ export default function EditProductPage() {
                     <input
                         type="number"
                         value={product.price ?? ""}
+                        disabled={loading}
                         onChange={(e) => setProduct({ ...product, price: Number(e.target.value) })}
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Pris"
@@ -89,6 +97,7 @@ export default function EditProductPage() {
 
                     <input
                         value={product.image ?? ""}
+                        disabled={loading}
                         onChange={(e) => setProduct({ ...product, image: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Bild URL"
@@ -96,9 +105,11 @@ export default function EditProductPage() {
                 </div>
 
                 <button
+                    type="submit"
+                    disabled={loading}
                     onClick={handleSave}
-                    className="w-full py-3 rounded-xl bg-[#D9BE95] border border-[#C8A97E] font-semibold hover:bg-[#CFB58C] transition">
-                    Spara ändringar
+                    className="w-full mt-3 py-3 rounded-xl bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:bg-[#EAE4D9] disabled:text-[#A89F94] disabled:border-[#D9BE95]/30 disabled:cursor-not-allowed disabled:shadow-none">
+                    {loading ? "Sparar..." : "Spara ändringar"}
                 </button>
             </div>
         </div>
