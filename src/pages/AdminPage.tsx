@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../services/auth";
-import { addProduct } from "../services/productService";
+import { addProduct, getProducts } from "../services/productService";
+import type { Product } from "../types/product.types";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
@@ -9,6 +10,23 @@ export default function AdminPage() {
     const [price, setPrice] = useState("");
     const [image, setImage] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const [latestProducts, setLatestProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const loadProducts = async () => {
+            const data = await getProducts();
+
+            const sortedProducts = data.sort((a, b) =>
+                new Date(b.created_at ?? "").getTime() -
+                new Date(a.created_at ?? "").getTime()
+            );
+
+            setLatestProducts(sortedProducts.slice(0, 3));
+        }
+
+        loadProducts();
+    })
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
@@ -95,6 +113,44 @@ export default function AdminPage() {
             >
                 Logga ut
             </button>
+
+            <div className="mt-6">
+                <h2 className="text-sm uppercase tracking-wider text-[#8C6843] mb-3">
+                    Senaste tillagda produkter
+                </h2>
+
+                <div className="space-y-3">
+                    {latestProducts.map((p) => (
+                        <div
+                            key={p.id}
+                            className="flex items-center justify-between p-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]">
+                            <div className="flex items-center gap-3">
+                                {p.image && (
+                                    <img
+                                        src={p.image}
+                                        className="w-12 h-12 object-cover rounded-lg"
+                                    />
+                                )}
+
+                                <div>
+                                    <p className="text-sm font-semibold">
+                                        {p.name}
+                                    </p>
+                                    <p className="text-xs text-[#6B625A]">
+                                        {p.price} kr
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => navigate(`/admin/products/${p.id}`)}
+                                className="text-xs px-3 py-1 rounded-lg border border-[#D9BE95]/50 hover:bg-[#D9BE95]/20">
+                                Redigera
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     )
 }
