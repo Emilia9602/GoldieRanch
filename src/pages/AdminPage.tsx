@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../services/auth";
-import { addProduct, getProducts } from "../services/productService";
+import { addProduct, deleteProduct, getProducts } from "../services/productService";
 import type { Product } from "../types/product.types";
 
 export default function AdminPage() {
@@ -167,11 +167,26 @@ export default function AdminPage() {
                                 </div>
                             </div>
 
-                            <button
-                                onClick={() => navigate(`/admin/products/${p.id}`)}
-                                className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C]">
-                                Redigera
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => navigate(`/admin/products/${p.id}`)}
+                                    className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C]">
+                                    Redigera
+                                </button>
+
+                                <button
+                                    onClick={async () => {
+                                        if (!confirm("Ta bort denna produkt?")) return;
+
+                                        await deleteProduct(p.id);
+
+                                        setLatestProducts((prev) =>
+                                            prev.filter((item) => item.id !== p.id));
+                                    }}
+                                    className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100">
+                                    Ta bort
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

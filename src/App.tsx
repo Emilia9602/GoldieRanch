@@ -9,6 +9,8 @@ import AdminPage from "./pages/AdminPage";
 import EditProductPage from "./pages/EditProductPage";
 
 //Lägg till sök på desktop
+//Sök ska funka
+//Footer
 //Kolla hover på admin lägg till knapp, som ska va samma överallt
 //SKU, antal, variationer, bild att ladda upp, kategori
 //Navigering till admin, anpassat
