@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Product } from "../../types/product.types";
 import { getProductById, updateProduct } from "../../services/productService";
+import AdminNav from "../../components/admin/AdminNav";
 
 export default function EditProductPage() {
     const { id } = useParams();
@@ -44,6 +45,9 @@ export default function EditProductPage() {
 
     return (
         <div className="pb-24 bg-[#FAF6EE] p-6">
+
+            <AdminNav />
+
             <div className="max-w-xl mx-auto bg-[#FAF7F2] p-6 rounded-2xl border border-[#D9BE95]/50">
 
                 <h1 className="text-lg font-semibold mb-1">

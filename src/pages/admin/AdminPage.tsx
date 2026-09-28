@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "../../services/auth";
 import { addProduct, deleteProduct, getProducts } from "../../services/productService";
 import type { Product } from "../../types/product.types";
+import AdminNav from "../../components/admin/AdminNav";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
@@ -54,11 +55,6 @@ export default function AdminPage() {
 
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        await signOut();
-        navigate("/login");
-    };
-
     const handleDelete = async (id: number) => {
         const confirmed = confirm("Ta bort denna produkt?");
         if (!confirmed) return;
@@ -75,6 +71,9 @@ export default function AdminPage() {
 
     return (
         <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 text-[#342D26]">
+
+            <AdminNav />
+
             <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
 
                 <h1 className="text-xl font-semibold mb-1">
@@ -148,14 +147,7 @@ export default function AdminPage() {
                 </form>
             </div>
 
-            <button
-                onClick={handleLogout}
-                className="px-4 py-2 rounded-lg bg-red-500 text-white"
-            >
-                Logga ut
-            </button>
-
-            <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
+            <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 mt-6 shadow-sm">
                 <h2 className="text-sm uppercase tracking-wider text-[#8C6843] mb-3">
                     Senaste tillagda produkter
                 </h2>

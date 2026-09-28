@@ -1,4 +1,4 @@
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../components/shop/ProductCard";
 import { useProducts } from "../../hooks/useProducts";
 
 export default function Shop() {
