@@ -57,6 +57,21 @@ export default function AdminPage() {
         navigate("/login");
     };
 
+    const handleDelete = async (id: number) => {
+        const confirmed = confirm("Ta bort denna produkt?");
+        if (!confirmed) return;
+
+        try {
+            await deleteProduct(id);
+
+            setLatestProducts((prev) =>
+                prev.filter((item) => item.id !== id));
+        } catch (err) {
+            console.log(err);
+            alert("Kunde ej ta bort");
+        }
+    }
+
     return (
         <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 text-[#342D26]">
             <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
@@ -175,14 +190,7 @@ export default function AdminPage() {
                                 </button>
 
                                 <button
-                                    onClick={async () => {
-                                        if (!confirm("Ta bort denna produkt?")) return;
-
-                                        await deleteProduct(p.id);
-
-                                        setLatestProducts((prev) =>
-                                            prev.filter((item) => item.id !== p.id));
-                                    }}
+                                    onClick={() => handleDelete(p.id)}
                                     className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100">
                                     Ta bort
                                 </button>
