@@ -12,18 +12,18 @@ export default function AdminPage() {
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<Product[]>([]);
 
+    const loadProducts = async () => {
+        const data = await getProducts();
+
+        const sortedProducts = data.sort((a, b) =>
+            new Date(b.created_at ?? "").getTime() -
+            new Date(a.created_at ?? "").getTime()
+        );
+
+        setLatestProducts(sortedProducts.slice(0, 3));
+    };
+
     useEffect(() => {
-        const loadProducts = async () => {
-            const data = await getProducts();
-
-            const sortedProducts = data.sort((a, b) =>
-                new Date(b.created_at ?? "").getTime() -
-                new Date(a.created_at ?? "").getTime()
-            );
-
-            setLatestProducts(sortedProducts.slice(0, 3));
-        }
-
         loadProducts();
     }, []);
 
@@ -40,6 +40,8 @@ export default function AdminPage() {
             setDescription("");
             setPrice("");
             setImage("");
+
+            await loadProducts();
 
             alert("Skapad");
         } catch (err) {
@@ -64,8 +66,7 @@ export default function AdminPage() {
         try {
             await deleteProduct(id);
 
-            setLatestProducts((prev) =>
-                prev.filter((item) => item.id !== id));
+            await loadProducts();
         } catch (err) {
             console.log(err);
             alert("Kunde ej ta bort");
