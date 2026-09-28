@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminPage from "./pages/admin/AdminPage";
 import EditProductPage from "./pages/admin/EditProductPage";
+import AdminProductsPage from "./pages/admin/AdminProductsPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -54,6 +55,15 @@ function App() {
               <EditProductPage />
             </ProtectedRoute>
           } />
+
+          <Route
+            path="/admin/products"
+            element={
+              <ProtectedRoute>
+                <AdminProductsPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
