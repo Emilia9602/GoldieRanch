@@ -1,5 +1,5 @@
-import ProductCard from "../components/ProductCard";
-import { useProducts } from "../hooks/useProducts";
+import ProductCard from "../../components/ProductCard";
+import { useProducts } from "../../hooks/useProducts";
 
 export default function Shop() {
     const { data: products, isLoading, error } = useProducts();

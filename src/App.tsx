@@ -1,16 +1,17 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ComingSoonPage from "./pages/ComingSoonPage";
-import ShopPage from "./pages/ShopPage";
+import ShopPage from "./pages/shop/ShopPage";
 import Navbar from "./pages/partials/navbar/Navbar";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/admin/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdminPage from "./pages/AdminPage";
-import EditProductPage from "./pages/EditProductPage";
+import AdminPage from "./pages/admin/AdminPage";
+import EditProductPage from "./pages/admin/EditProductPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
 //Footer
+//Modaler istället för alert på delete
 //Kolla hover på admin lägg till knapp, som ska va samma överallt
 //SKU, antal, variationer, bild att ladda upp, kategori
 //Navigering till admin, anpassat

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Product } from "../types/product.types";
-import { getProductById, updateProduct } from "../services/productService";
+import type { Product } from "../../types/product.types";
+import { getProductById, updateProduct } from "../../services/productService";
 
 export default function EditProductPage() {
     const { id } = useParams();

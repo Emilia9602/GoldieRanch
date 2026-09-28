@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             (_event, session) => {
                 setSession(session);
                 setUser(session?.user ?? null);
-                setRole(session?.user?.app_metadata?.role ?? null);
+                setRole(session?.user?.user_metadata?.role ?? null);
             }
         );
 

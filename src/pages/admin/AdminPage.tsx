@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../services/auth";
-import { addProduct, deleteProduct, getProducts } from "../services/productService";
-import type { Product } from "../types/product.types";
+import { signOut } from "../../services/auth";
+import { addProduct, deleteProduct, getProducts } from "../../services/productService";
+import type { Product } from "../../types/product.types";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
