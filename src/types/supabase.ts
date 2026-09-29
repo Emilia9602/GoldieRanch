@@ -12,35 +12,38 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
+      product_variants: {
+        Row: {
+          color: string | null
+          id: number
+          price: number | null
+          size: string | null
+          sku: string | null
+          stock: number | null
+        }
+        Insert: {
+          color?: string | null
+          id?: number
+          price?: number | null
+          size?: string | null
+          sku?: string | null
+          stock?: number | null
+        }
+        Update: {
+          color?: string | null
+          id?: number
+          price?: number | null
+          size?: string | null
+          sku?: string | null
+          stock?: number | null
+        }
+        Relationships: []
+      }
       products: {
         Row: {
+          category: string | null
           created_at: string
           description: string | null
           id: number
@@ -50,6 +53,7 @@ export type Database = {
           price: number | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           description?: string | null
           id?: number
@@ -59,6 +63,7 @@ export type Database = {
           price?: number | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           description?: string | null
           id?: number
@@ -203,9 +208,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },
