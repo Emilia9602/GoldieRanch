@@ -14,7 +14,7 @@ import AdminProductsPage from "./pages/admin/AdminProductsPage";
 //Footer
 //Modaler istället för alert på delete
 //Kolla hover på admin lägg till knapp, som ska va samma överallt
-//SKU, antal, variationer, bild att ladda upp, kategori
+//Bild att ladda upp
 //Navigering till admin, anpassat
 //En produktsida
 //Första sidan, fixa som vi vill ha

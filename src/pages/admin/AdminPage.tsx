@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { addProduct, deleteProduct, getProducts } from "../../services/productService";
 import type { Product } from "../../types/product.types";
 import AdminNav from "../../components/admin/AdminNav";
+import { uploadImage } from "../../services/storageService";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
-    const [image, setImage] = useState("");
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<Product[]>([]);
 
@@ -27,19 +29,39 @@ export default function AdminPage() {
         loadProducts();
     }, []);
 
+    useEffect(() => {
+        return () => {
+            if (preview) {
+                URL.revokeObjectURL(preview);
+            }
+        };
+    }, [preview]);
+
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+            let imageUrl: string | null = null;
+
+            if (imageFile) {
+                try {
+                    imageUrl = await uploadImage(imageFile);
+                } catch (err) {
+                    console.log(err);
+                    alert("Bild kunde inte laddas upp");
+                    return;
+                }
+            }
             await addProduct({
-                name, description, price: price ? Number(price) : null, image: image || null,
+                name, description, price: price ? Number(price) : null, image: imageUrl,
             });
 
             setName("");
             setDescription("");
             setPrice("");
-            setImage("");
+            setImageFile(null);
+            setPreview(null);
 
             await loadProducts();
 
@@ -130,11 +152,34 @@ export default function AdminPage() {
                         </label>
 
                         <input
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
-                            placeholder="Bild URL"
-                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files?.[0] || null;
+                                setImageFile(file);
+
+                                if (file) {
+                                    setPreview(URL.createObjectURL(file));
+                                } else {
+                                    setPreview(null);
+                                }
+                            }}
+                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm"
                         />
+
+                        {preview && (
+                            <div className="mt-3">
+                                <p className="text-xs text-[#8C6843] mb-2 uppercase tracking-wider">
+                                    Förhandsvisning
+                                </p>
+
+                                <img
+                                    src={preview}
+                                    alt="preview"
+                                    className="w-32 h-32 object-cover rounded-lg border border-[#D9BE95]/50"
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <button
