@@ -3,12 +3,15 @@ import { useParams } from "react-router-dom";
 import type { Product } from "../../types/product.types";
 import { getProductById, updateProduct } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
+import { uploadImage } from "../../services/storageService";
 
 export default function EditProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -19,6 +22,7 @@ export default function EditProductPage() {
             try {
                 const data = await getProductById(Number(id));
                 setProduct(data);
+                setPreview(data.image ?? null);
             } catch (err) {
                 console.log(err);
                 alert("Kunde ej hämta produkt");
@@ -36,11 +40,17 @@ export default function EditProductPage() {
         setLoading(true);
 
         try {
+            let imageUrl = product.image;
+
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
+
             await updateProduct(product.id!, {
                 name: product.name,
                 description: product.description,
                 price: product.price,
-                image: product.image,
+                image: imageUrl,
             });
             alert("Uppdaterad");
         } catch (err) {
@@ -130,12 +140,53 @@ export default function EditProductPage() {
                     </label>
 
                     <input
-                        value={product.image ?? ""}
+                        type="file"
+                        accept="image/*"
+                        id="file-upload"
                         disabled={loading}
-                        onChange={(e) => setProduct({ ...product, image: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                        placeholder="Bild URL"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setImageFile(file);
+
+                            if (file) {
+                                setPreview(URL.createObjectURL(file));
+                            }
+                        }}
+                        className="hidden"
+                        placeholder="Image of product"
                     />
+
+                    <label
+                        htmlFor="file-upload"
+                        className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-[#D9BE95]/60 rounded-xl bg-[#FAF6EE] cursor-pointer hover:bg-[#F3EBDD] transition">
+                        <span className="text-sm font-semibold text-[#8C6843]">
+                            {preview ? "Byt bild" : "Ladda upp bild"}
+                        </span>
+
+                        <span
+                            className="text-xs text-[#A89F94] mt-1">
+                            PNG, JPG
+                        </span>
+                    </label>
+
+                    {preview && (
+                        <div className="mt-3">
+                            <p className="text-xs text-[#8C6843] mb-2 uppercase tracking-wider">
+                                Förhandsvisning
+                            </p>
+
+                            <img
+                                src={preview}
+                                className="w-32 h-32 object-cover rounded-lg border border-[#D9BE95]/50"
+                            />
+                        </div>
+                    )}
+
+                    {imageFile && (
+                        <p className="text-xs text-[#6B625A] mt-2">
+                            {imageFile.name}
+                        </p>
+                    )}
                 </div>
 
                 <button

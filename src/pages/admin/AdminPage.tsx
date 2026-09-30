@@ -154,6 +154,7 @@ export default function AdminPage() {
                         <input
                             type="file"
                             accept="image/*"
+                            id="file-upload"
                             onChange={(e) => {
                                 const file = e.target.files?.[0] || null;
                                 setImageFile(file);
@@ -164,20 +165,53 @@ export default function AdminPage() {
                                     setPreview(null);
                                 }
                             }}
-                            className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm"
+                            className="hidden"
+                            placeholder="Image of product"
                         />
 
+                        <label
+                            htmlFor="file-upload"
+                            className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl transition cursor-pointer
+                                        ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#F3EBDD]"}
+                                        ${preview ? "border-[#CFB58C]" : "border-[#D9BE95]/60 bg-[#FAF6EE]"}`}
+                        >
+                            <span className="text-sm font-semibold text-[#8C6843]">
+                                {preview ? "Byt bild" : "Ladda upp produktbild"}
+                            </span>
+
+                            <span className="text-xs text-[#A89F94] mt-1">
+                                PNG, JPG
+                            </span>
+                        </label>
+
                         {preview && (
-                            <div className="mt-3">
-                                <p className="text-xs text-[#8C6843] mb-2 uppercase tracking-wider">
+                            <div className="mt-3 flex flex-col items-center gap-2">
+                                <p className="text-xs text-[#8C6843] uppercase tracking-wider">
                                     Förhandsvisning
                                 </p>
 
                                 <img
                                     src={preview}
                                     alt="preview"
-                                    className="w-32 h-32 object-cover rounded-lg border border-[#D9BE95]/50"
+                                    className="w-28 h-28 object-cover rounded-lg border border-[#D9BE95]/50"
                                 />
+
+                                {imageFile && (
+                                    <p className="text-xs text-[#6B625A] text-center max-w-[140px] truncate">
+                                        {imageFile.name}
+                                    </p>
+                                )}
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setImageFile(null);
+                                        setPreview(null);
+                                    }}
+                                    className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
+                                >
+                                    Ta bort
+                                </button>
                             </div>
                         )}
                     </div>
