@@ -8,12 +8,23 @@ export default function EditProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(true);
 
     useEffect(() => {
         const loadProduct = async () => {
             if (!id) return;
-            const data = await getProductById(Number(id));
-            setProduct(data);
+
+            setFetching(true);
+
+            try {
+                const data = await getProductById(Number(id));
+                setProduct(data);
+            } catch (err) {
+                console.log(err);
+                alert("Kunde ej hämta produkt");
+            } finally {
+                setFetching(false);
+            }
         };
 
         loadProduct();
@@ -25,7 +36,12 @@ export default function EditProductPage() {
         setLoading(true);
 
         try {
-            await updateProduct(product.id!, product);
+            await updateProduct(product.id!, {
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: product.image,
+            });
             alert("Uppdaterad");
         } catch (err) {
             console.log(err);
@@ -35,12 +51,20 @@ export default function EditProductPage() {
         }
     }
 
-    if (!product) {
+    if (fetching) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
                 <p className="text-sm text-[#8C6843]">Laddar produkt...</p>
             </div>
         )
+    }
+
+    if (!product) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
+                <p className="text-sm text-red-500">Produkt hittades inte</p>
+            </div>
+        );
     }
 
     return (
@@ -94,7 +118,7 @@ export default function EditProductPage() {
                         type="number"
                         value={product.price ?? ""}
                         disabled={loading}
-                        onChange={(e) => setProduct({ ...product, price: Number(e.target.value) })}
+                        onChange={(e) => setProduct({ ...product, price: e.target.value === "" ? null : Number(e.target.value), })}
                         className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         placeholder="Pris"
                     />
