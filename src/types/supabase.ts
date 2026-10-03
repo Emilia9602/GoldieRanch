@@ -19,6 +19,7 @@ export type Database = {
           color: string | null
           id: number
           price: number | null
+          product_id: number
           size: string | null
           sku: string | null
           stock: number | null
@@ -27,6 +28,7 @@ export type Database = {
           color?: string | null
           id?: number
           price?: number | null
+          product_id: number
           size?: string | null
           sku?: string | null
           stock?: number | null
@@ -35,11 +37,20 @@ export type Database = {
           color?: string | null
           id?: number
           price?: number | null
+          product_id?: number
           size?: string | null
           sku?: string | null
           stock?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
