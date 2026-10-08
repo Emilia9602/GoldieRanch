@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Product, ProductVariant } from "../../types/product.types";
-import { addVariant, deleteVariant, getProductWithVariants, updateProduct, updateVariant } from "../../services/productService";
+import type { ProductVariant, ProductWithVariants } from "../../types/product.types";
+import { addVariant, deleteVariant, getProductWithVariantsById, updateProduct, updateVariant } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 
 export default function EditProductPage() {
     const { id } = useParams();
-    const [product, setProduct] = useState<Product | null>(null);
+    const [product, setProduct] = useState<ProductWithVariants | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -23,7 +23,7 @@ export default function EditProductPage() {
             setFetching(true);
 
             try {
-                const data = await getProductWithVariants(Number(id));
+                const data = await getProductWithVariantsById(Number(id));
                 setProduct(data);
                 setVariants(data.product_variants ?? []);
                 setPreview(data.image ?? null);
@@ -123,7 +123,7 @@ export default function EditProductPage() {
                 }
             }
 
-            const updatedData = await getProductWithVariants(product.id);
+            const updatedData = await getProductWithVariantsById(product.id);
 
             setProduct(updatedData);
             setVariants(updatedData.product_variants ?? []);

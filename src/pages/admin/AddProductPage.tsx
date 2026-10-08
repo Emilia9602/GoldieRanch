@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addProduct, addVariant, deleteProduct, getProducts } from "../../services/productService";
-import type { Product, ProductVariant } from "../../types/product.types";
+import { addProduct, addVariant, deleteProduct, getProductsWithVariants } from "../../services/productService";
+import type { ProductVariant, ProductWithVariants } from "../../types/product.types";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 
-export default function AdminPage() {
+export default function AddProductPage() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [latestProducts, setLatestProducts] = useState<Product[]>([]);
+    const [latestProducts, setLatestProducts] = useState<ProductWithVariants[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
 
     const loadProducts = async () => {
-        const data = await getProducts();
+        const data = await getProductsWithVariants();
 
         const sortedProducts = data.sort((a, b) =>
             new Date(b.created_at ?? "").getTime() -
@@ -311,11 +311,11 @@ export default function AdminPage() {
                                         {p.price} kr
                                     </p>
                                     <p className="text-xs text-[#6B625A]">
-                                        {variants.length === 0
+                                        {p.product_variants.length === 0
                                             ? "Inga varianter"
-                                            : variants.length === 1
+                                            : p.product_variants.length === 1
                                                 ? "1 variant"
-                                                : `${variants.length} varianter`}
+                                                : `${p.product_variants.length} varianter`}
                                     </p>
                                 </div>
                             </div>

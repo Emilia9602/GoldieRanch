@@ -54,7 +54,8 @@ export async function deleteProduct(id: number) {
 
     if (error) throw error;
 }
-export async function getProductWithVariants(id: number) {
+
+export async function getProductWithVariantsById(id: number) {
     const { data, error } = await supabase
         .from("products")
         .select(`*, product_variants (*)`)
@@ -64,6 +65,17 @@ export async function getProductWithVariants(id: number) {
     if (error) throw error;
     return data;
 }
+
+export async function getProductsWithVariants() {
+    const { data, error } = await supabase
+        .from("products")
+        .select(`*, product_variants (*)`);
+
+    if (error) throw error;
+
+    return data ?? [];
+}
+
 export async function addVariant(variant: ProductVariantInsert) {
     const { data, error } = await supabase
         .from("product_variants")

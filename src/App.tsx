@@ -5,9 +5,9 @@ import Navbar from "./pages/partials/navbar/Navbar";
 import LoginPage from "./pages/admin/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdminPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
 import AdminProductsPage from "./pages/admin/AdminProductsPage";
+import AddProductPage from "./pages/admin/AddProductPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -58,7 +58,7 @@ function App() {
             path="/admin/add/product"
             element={
               <ProtectedRoute>
-                <AdminPage />
+                <AddProductPage />
               </ProtectedRoute>
             }
           />

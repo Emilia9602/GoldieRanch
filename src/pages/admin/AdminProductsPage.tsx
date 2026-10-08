@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Product } from "../../types/product.types";
+import type { ProductWithVariants } from "../../types/product.types";
 import { useNavigate } from "react-router-dom";
-import { deleteProduct, getProducts } from "../../services/productService";
+import { deleteProduct, getProductsWithVariants } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
 
 export default function AdminProductsPage() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<ProductWithVariants[]>([]);
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function AdminProductsPage() {
     const loadProducts = async () => {
         try {
             setLoading(true);
-            const data = await getProducts();
+            const data = await getProductsWithVariants();
 
             const sorted = data.sort(
                 (a, b) =>
@@ -86,6 +86,13 @@ export default function AdminProductsPage() {
                                         </p>
                                         <p className="text-xs text-[#6B625A]">
                                             {p.price} kr
+                                        </p>
+                                        <p className="text-xs text-[#6B625A]">
+                                            {p.product_variants.length === 0
+                                                ? "Inga varianter"
+                                                : p.product_variants.length === 1
+                                                    ? "1 variant"
+                                                    : `${p.product_variants.length} varianter`}
                                         </p>
                                     </div>
                                 </div>

@@ -17,3 +17,7 @@ export type ProductVariantInsert =
 
 export type ProductVariantUpdate =
     Database["public"]["Tables"]["product_variants"]["Update"];
+
+export type ProductWithVariants = Product & {
+    product_variants: ProductVariant[];
+};
