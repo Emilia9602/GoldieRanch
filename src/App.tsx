@@ -23,7 +23,6 @@ import AdminProductsPage from "./pages/admin/AdminProductsPage";
 //Hur loggar vi in?
 //Kontakt sida
 //Anpassa lägg till till desktop
-//Ändra så att adminpage inte ha lägg till som första?
 //Error, loading state bättre, komponenter 
 //Annat än alerts
 //Not found page

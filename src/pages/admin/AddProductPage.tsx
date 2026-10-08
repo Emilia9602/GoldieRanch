@@ -310,6 +310,13 @@ export default function AdminPage() {
                                     <p className="text-xs text-[#6B625A]">
                                         {p.price} kr
                                     </p>
+                                    <p className="text-xs text-[#6B625A]">
+                                        {variants.length === 0
+                                            ? "Inga varianter"
+                                            : variants.length === 1
+                                                ? "1 variant"
+                                                : `${variants.length} varianter`}
+                                    </p>
                                 </div>
                             </div>
 
