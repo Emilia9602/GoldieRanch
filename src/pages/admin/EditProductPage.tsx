@@ -123,7 +123,14 @@ export default function EditProductPage() {
                 }
             }
 
+            const updatedData = await getProductWithVariants(product.id);
+
+            setProduct(updatedData);
+            setVariants(updatedData.product_variants ?? []);
             setDeletedVariantIds([]);
+
+            setImageFile(null);
+            setPreview(updatedData.image ?? null);
 
             alert("Uppdaterad");
         } catch (err) {
