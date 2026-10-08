@@ -258,14 +258,14 @@ export default function EditProductPage() {
                             type="button"
                             disabled={loading}
                             onClick={handleAddVariant}
-                            className="text-xs font-semibold text-[#8C6843] hover:text-[#342D26] disabled:opacity-50"
+                            className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C]"
                         >
                             + Lägg till variant
                         </button>
                     </div>
 
                     <p className="text-xs text-[#8C6843] mb-4">
-                        Lägg till exempelvis färg, storlek, lager och SKU.
+                        Lägg till färg, storlek, pris, lager och SKU.
                     </p>
 
                     {variants.length > 0 && (
@@ -285,7 +285,7 @@ export default function EditProductPage() {
                                             type="button"
                                             disabled={loading}
                                             onClick={() => handleRemoveVariant(variant)}
-                                            className="text-xs text-red-600 hover:text-red-700 disabled:opacity-50"
+                                            className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
                                         >
                                             Ta bort
                                         </button>
