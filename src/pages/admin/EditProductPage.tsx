@@ -38,7 +38,6 @@ export default function EditProductPage() {
         loadProduct();
     }, [id]);
 
-    //Om pris inte är samma för varje varint i produkten
     const handleAddVariant = () => {
         if (!product) return;
 
@@ -52,7 +51,7 @@ export default function EditProductPage() {
             stock: 0,
         };
 
-        setVariants((current) => [...current, newVariant]);
+        setVariants((current) => [newVariant, ...current]);
     };
 
     const handleRemoveVariant = (variant: ProductVariant) => {

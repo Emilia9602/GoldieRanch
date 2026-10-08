@@ -38,7 +38,7 @@ export default function AddProductPage() {
             stock: 0,
         };
 
-        setVariants((current) => [...current, newVariant]);
+        setVariants((current) => [newVariant, ...current]);
     };
 
     const handleRemoveVariant = (variant: ProductVariant) => {
