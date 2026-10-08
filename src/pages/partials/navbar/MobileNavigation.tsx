@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 export default function MobileNavigation() {
     const [open, setOpen] = useState(false);
+
+    const { role } = useAuth();
 
     const location = useLocation();
     const isActive = (path: string) => location.pathname === path;
@@ -201,6 +204,34 @@ export default function MobileNavigation() {
                                     Kontakt
                                 </span>
                             </Link>
+
+                            {role === "admin" && (
+                                <Link
+                                    to="/admin"
+                                    onClick={closeMenu}
+                                    className={quickLinkClass("/admin")}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-5 h-5"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M10.5 2.25h3l.5 2.25a7.75 7.75 0 0 1 2.1.87l1.95-1.2 2.12 2.12-1.2 1.95c.37.65.66 1.35.87 2.1l2.25.5v3l-2.25.5a7.75 7.75 0 0 1-.87 2.1l1.2 1.95-2.12 2.12-1.95-1.2a7.75 7.75 0 0 1-2.1.87l-.5 2.25h-3l-.5-2.25a7.75 7.75 0 0 1-2.1-.87l-1.95 1.2-2.12-2.12 1.2-1.95a7.75 7.75 0 0 1-.87-2.1l-2.25-.5v-3l2.25-.5c.2-.75.5-1.45.87-2.1l-1.2-1.95L5.95 4.17l1.95 1.2a7.75 7.75 0 0 1 2.1-.87l.5-2.25Z"
+                                        />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+
+                                    <span className="text-[10px] uppercase tracking-wider font-semibold">
+                                        Admin
+                                    </span>
+                                </Link>
+                            )}
                         </div>
 
                         <div className="mt-5 rounded-xl bg-[#FAF7F2] border border-[#E5DFD5] overflow-hidden">

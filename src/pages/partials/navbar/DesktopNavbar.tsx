@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 export default function DesktopNavbar() {
     const location = useLocation();
@@ -12,6 +13,8 @@ export default function DesktopNavbar() {
             ? "text-[#342D26] after:w-full"
             : "text-[#6B625A] hover:text-[#342D26] after:w-0 hover:after:w-full"
         }`;
+
+    const { role } = useAuth();
 
     return (
         <nav className="w-full border-b border-[#D9BE95]/60 bg-[#FAF7F2]/80 backdrop-blur-md sticky top-0 z-50">
@@ -42,6 +45,12 @@ export default function DesktopNavbar() {
                     <Link to="/contact" className={linkStyle(isActive("/contact"))}>
                         Kontakt
                     </Link>
+
+                    {role === "admin" && (
+                        <Link to="/admin" className={linkStyle(isActive("/admin"))}>
+                            Admin
+                        </Link>
+                    )}
                 </div>
             </div>
         </nav>

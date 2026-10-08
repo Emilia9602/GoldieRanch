@@ -26,6 +26,7 @@ import AddProductPage from "./pages/admin/AddProductPage";
 //Error, loading state bättre, komponenter 
 //Annat än alerts
 //Not found page
+//Login ska ha egen länk till oss att komma direkt till
 
 function App() {
   return (
