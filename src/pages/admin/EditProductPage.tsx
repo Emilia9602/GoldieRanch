@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Product } from "../../types/product.types";
-import { getProductById, updateProduct } from "../../services/productService";
+import type { Product, ProductVariant } from "../../types/product.types";
+import { addVariant, deleteVariant, getProductWithVariants, updateProduct, updateVariant } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 
@@ -12,6 +12,8 @@ export default function EditProductPage() {
     const [fetching, setFetching] = useState(true);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [variants, setVariants] = useState<ProductVariant[]>([]);
+    const [deletedVariantIds, setDeletedVariantIds] = useState<number[]>([]);
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -20,8 +22,9 @@ export default function EditProductPage() {
             setFetching(true);
 
             try {
-                const data = await getProductById(Number(id));
+                const data = await getProductWithVariants(Number(id));
                 setProduct(data);
+                setVariants(data.product_variants ?? []);
                 setPreview(data.image ?? null);
             } catch (err) {
                 console.log(err);
@@ -33,6 +36,33 @@ export default function EditProductPage() {
 
         loadProduct();
     }, [id]);
+
+    //Om pris inte är samma för varje varint i produkten
+    const handleAddVariant = () => {
+        if (!product) return;
+
+        const newVariant: ProductVariant = {
+            id: -Date.now(),
+            product_id: product.id,
+            color: "",
+            size: "",
+            price: product.price,
+            sku: "",
+            stock: 0,
+        };
+
+        setVariants((current) => [...current, newVariant]);
+    };
+
+    const handleRemoveVariant = (variant: ProductVariant) => {
+        if (variant.id > 0) {
+            setDeletedVariantIds((current) => [...current, variant.id]);
+        }
+
+        setVariants((current) =>
+            current.filter((item) => item.id !== variant.id)
+        );
+    };
 
     const handleSave = async () => {
         if (!product) return;
@@ -46,12 +76,40 @@ export default function EditProductPage() {
                 imageUrl = await uploadImage(imageFile);
             }
 
-            await updateProduct(product.id!, {
+            await updateProduct(product.id, {
                 name: product.name,
                 description: product.description,
                 price: product.price,
                 image: imageUrl,
             });
+
+            for (const variantId of deletedVariantIds) {
+                await deleteVariant(variantId);
+            }
+
+            for (const variant of variants) {
+                if (variant.id < 0) {
+                    await addVariant({
+                        product_id: product.id,
+                        color: variant.color,
+                        size: variant.size,
+                        price: variant.price,
+                        sku: variant.sku,
+                        stock: variant.stock,
+                    });
+                } else {
+                    await updateVariant(variant.id, {
+                        color: variant.color,
+                        size: variant.size,
+                        price: variant.price,
+                        sku: variant.sku,
+                        stock: variant.stock,
+                    });
+                }
+            }
+
+            setDeletedVariantIds([]);
+
             alert("Uppdaterad");
         } catch (err) {
             console.log(err);
@@ -189,6 +247,200 @@ export default function EditProductPage() {
                     )}
                 </div>
 
+                <div className="mt-8 pt-6 border-t border-[#D9BE95]/40">
+
+                    <div className="flex items-center justify-between mb-1">
+                        <h2 className="text-sm font-semibold text-[#342D26]">
+                            Varianter
+                        </h2>
+
+                        <button
+                            type="button"
+                            disabled={loading}
+                            onClick={handleAddVariant}
+                            className="text-xs font-semibold text-[#8C6843] hover:text-[#342D26] disabled:opacity-50"
+                        >
+                            + Lägg till variant
+                        </button>
+                    </div>
+
+                    <p className="text-xs text-[#8C6843] mb-4">
+                        Lägg till exempelvis färg, storlek, lager och SKU.
+                    </p>
+
+                    {variants.length > 0 && (
+                        <div className="space-y-4">
+                            {variants.map((variant) => (
+                                <div
+                                    key={variant.id}
+                                    className="rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] p-4"
+                                >
+                                    <div className="flex items-center justify-between mb-4">
+
+                                        <p className="text-xs uppercase tracking-wider text-[#8C6843]">
+                                            Variant
+                                        </p>
+
+                                        <button
+                                            type="button"
+                                            disabled={loading}
+                                            onClick={() => handleRemoveVariant(variant)}
+                                            className="text-xs text-red-600 hover:text-red-700 disabled:opacity-50"
+                                        >
+                                            Ta bort
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+
+                                        <div>
+                                            <label className="block text-xs text-[#8C6843] mb-1">
+                                                Färg
+                                            </label>
+
+                                            <input
+                                                value={variant.color ?? ""}
+                                                disabled={loading}
+                                                onChange={(e) =>
+                                                    setVariants((current) =>
+                                                        current.map((item) =>
+                                                            item.id === variant.id
+                                                                ? {
+                                                                    ...item,
+                                                                    color: e.target.value,
+                                                                }
+                                                                : item
+                                                        )
+                                                    )
+                                                }
+                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                                                placeholder="Svart"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs text-[#8C6843] mb-1">
+                                                Storlek
+                                            </label>
+
+                                            <input
+                                                value={variant.size ?? ""}
+                                                disabled={loading}
+                                                onChange={(e) =>
+                                                    setVariants((current) =>
+                                                        current.map((item) =>
+                                                            item.id === variant.id
+                                                                ? {
+                                                                    ...item,
+                                                                    size: e.target.value,
+                                                                }
+                                                                : item
+                                                        )
+                                                    )
+                                                }
+                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                                                placeholder="M"
+                                            />
+                                        </div>
+
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3 mt-3">
+
+                                        <div>
+                                            <label className="block text-xs text-[#8C6843] mb-1">
+                                                Pris
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                value={variant.price ?? ""}
+                                                disabled={loading}
+                                                onChange={(e) =>
+                                                    setVariants((current) =>
+                                                        current.map((item) =>
+                                                            item.id === variant.id
+                                                                ? {
+                                                                    ...item,
+                                                                    price:
+                                                                        e.target.value === ""
+                                                                            ? null
+                                                                            : Number(e.target.value),
+                                                                }
+                                                                : item
+                                                        )
+                                                    )
+                                                }
+                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                                                placeholder="499"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs text-[#8C6843] mb-1">
+                                                Lager
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                value={variant.stock ?? ""}
+                                                disabled={loading}
+                                                onChange={(e) =>
+                                                    setVariants((current) =>
+                                                        current.map((item) =>
+                                                            item.id === variant.id
+                                                                ? {
+                                                                    ...item,
+                                                                    stock:
+                                                                        e.target.value === ""
+                                                                            ? null
+                                                                            : Number(e.target.value),
+                                                                }
+                                                                : item
+                                                        )
+                                                    )
+                                                }
+                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                                                placeholder="10"
+                                            />
+                                        </div>
+
+                                    </div>
+
+                                    <div className="mt-3">
+
+                                        <label className="block text-xs text-[#8C6843] mb-1">
+                                            SKU
+                                        </label>
+
+                                        <input
+                                            value={variant.sku ?? ""}
+                                            disabled={loading}
+                                            onChange={(e) =>
+                                                setVariants((current) =>
+                                                    current.map((item) =>
+                                                        item.id === variant.id
+                                                            ? {
+                                                                ...item,
+                                                                sku: e.target.value,
+                                                            }
+                                                            : item
+                                                    )
+                                                )
+                                            }
+                                            className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
+                                            placeholder="GR-HOODIE-BLK-M"
+                                        />
+
+                                    </div>
+
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
+
                 <button
                     disabled={loading}
                     onClick={handleSave}
@@ -196,6 +448,6 @@ export default function EditProductPage() {
                     {loading ? "Sparar..." : "Spara ändringar"}
                 </button>
             </div>
-        </div>
+        </div >
     )
 }
