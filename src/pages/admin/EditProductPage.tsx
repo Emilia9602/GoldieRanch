@@ -4,6 +4,7 @@ import type { Product, ProductVariant } from "../../types/product.types";
 import { addVariant, deleteVariant, getProductWithVariants, updateProduct, updateVariant } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
+import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 
 export default function EditProductPage() {
     const { id } = useParams();
@@ -61,6 +62,20 @@ export default function EditProductPage() {
 
         setVariants((current) =>
             current.filter((item) => item.id !== variant.id)
+        );
+    };
+
+    const handleVariantChange = (
+        id: number,
+        field: keyof ProductVariant,
+        value: string | number | null
+    ) => {
+        setVariants((current) =>
+            current.map((variant) =>
+                variant.id === id
+                    ? { ...variant, [field]: value }
+                    : variant
+            )
         );
     };
 
@@ -247,199 +262,12 @@ export default function EditProductPage() {
                     )}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-[#D9BE95]/40">
-
-                    <div className="flex items-center justify-between mb-1">
-                        <h2 className="text-sm font-semibold text-[#342D26]">
-                            Varianter
-                        </h2>
-
-                        <button
-                            type="button"
-                            disabled={loading}
-                            onClick={handleAddVariant}
-                            className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C]"
-                        >
-                            + Lägg till variant
-                        </button>
-                    </div>
-
-                    <p className="text-xs text-[#8C6843] mb-4">
-                        Lägg till färg, storlek, pris, lager och SKU.
-                    </p>
-
-                    {variants.length > 0 && (
-                        <div className="space-y-4">
-                            {variants.map((variant) => (
-                                <div
-                                    key={variant.id}
-                                    className="rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] p-4"
-                                >
-                                    <div className="flex items-center justify-between mb-4">
-
-                                        <p className="text-xs uppercase tracking-wider text-[#8C6843]">
-                                            Variant
-                                        </p>
-
-                                        <button
-                                            type="button"
-                                            disabled={loading}
-                                            onClick={() => handleRemoveVariant(variant)}
-                                            className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
-                                        >
-                                            Ta bort
-                                        </button>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-3">
-
-                                        <div>
-                                            <label className="block text-xs text-[#8C6843] mb-1">
-                                                Färg
-                                            </label>
-
-                                            <input
-                                                value={variant.color ?? ""}
-                                                disabled={loading}
-                                                onChange={(e) =>
-                                                    setVariants((current) =>
-                                                        current.map((item) =>
-                                                            item.id === variant.id
-                                                                ? {
-                                                                    ...item,
-                                                                    color: e.target.value,
-                                                                }
-                                                                : item
-                                                        )
-                                                    )
-                                                }
-                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                                                placeholder="Svart"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs text-[#8C6843] mb-1">
-                                                Storlek
-                                            </label>
-
-                                            <input
-                                                value={variant.size ?? ""}
-                                                disabled={loading}
-                                                onChange={(e) =>
-                                                    setVariants((current) =>
-                                                        current.map((item) =>
-                                                            item.id === variant.id
-                                                                ? {
-                                                                    ...item,
-                                                                    size: e.target.value,
-                                                                }
-                                                                : item
-                                                        )
-                                                    )
-                                                }
-                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                                                placeholder="M"
-                                            />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-3 mt-3">
-
-                                        <div>
-                                            <label className="block text-xs text-[#8C6843] mb-1">
-                                                Pris
-                                            </label>
-
-                                            <input
-                                                type="number"
-                                                value={variant.price ?? ""}
-                                                disabled={loading}
-                                                onChange={(e) =>
-                                                    setVariants((current) =>
-                                                        current.map((item) =>
-                                                            item.id === variant.id
-                                                                ? {
-                                                                    ...item,
-                                                                    price:
-                                                                        e.target.value === ""
-                                                                            ? null
-                                                                            : Number(e.target.value),
-                                                                }
-                                                                : item
-                                                        )
-                                                    )
-                                                }
-                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                                                placeholder="499"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs text-[#8C6843] mb-1">
-                                                Lager
-                                            </label>
-
-                                            <input
-                                                type="number"
-                                                value={variant.stock ?? ""}
-                                                disabled={loading}
-                                                onChange={(e) =>
-                                                    setVariants((current) =>
-                                                        current.map((item) =>
-                                                            item.id === variant.id
-                                                                ? {
-                                                                    ...item,
-                                                                    stock:
-                                                                        e.target.value === ""
-                                                                            ? null
-                                                                            : Number(e.target.value),
-                                                                }
-                                                                : item
-                                                        )
-                                                    )
-                                                }
-                                                className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                                                placeholder="10"
-                                            />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="mt-3">
-
-                                        <label className="block text-xs text-[#8C6843] mb-1">
-                                            SKU
-                                        </label>
-
-                                        <input
-                                            value={variant.sku ?? ""}
-                                            disabled={loading}
-                                            onChange={(e) =>
-                                                setVariants((current) =>
-                                                    current.map((item) =>
-                                                        item.id === variant.id
-                                                            ? {
-                                                                ...item,
-                                                                sku: e.target.value,
-                                                            }
-                                                            : item
-                                                    )
-                                                )
-                                            }
-                                            className="w-full px-3 py-2.5 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
-                                            placeholder="GR-HOODIE-BLK-M"
-                                        />
-
-                                    </div>
-
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                </div>
+                <ProductVariantsEditor
+                    variants={variants}
+                    loading={loading}
+                    onAdd={handleAddVariant}
+                    onRemove={handleRemoveVariant}
+                    onChange={handleVariantChange} />
 
                 <button
                     disabled={loading}
