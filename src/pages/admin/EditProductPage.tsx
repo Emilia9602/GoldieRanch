@@ -267,7 +267,8 @@ export default function EditProductPage() {
                     loading={loading}
                     onAdd={handleAddVariant}
                     onRemove={handleRemoveVariant}
-                    onChange={handleVariantChange} />
+                    onChange={handleVariantChange}
+                />
 
                 <button
                     disabled={loading}

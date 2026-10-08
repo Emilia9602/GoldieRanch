@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addProduct, deleteProduct, getProducts } from "../../services/productService";
-import type { Product } from "../../types/product.types";
+import type { Product, ProductVariant } from "../../types/product.types";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
+import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 
 export default function AdminPage() {
     const [name, setName] = useState("");
@@ -13,6 +14,7 @@ export default function AdminPage() {
     const [preview, setPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<Product[]>([]);
+    const [variants, setVariants] = useState<ProductVariant[]>([]);
 
     const loadProducts = async () => {
         const data = await getProducts();
@@ -23,6 +25,40 @@ export default function AdminPage() {
         );
 
         setLatestProducts(sortedProducts.slice(0, 3));
+    };
+
+    const handleAddVariant = () => {
+        const newVariant: ProductVariant = {
+            id: -Date.now(),
+            product_id: 0,
+            color: "",
+            size: "",
+            price: price ? Number(price) : null,
+            sku: "",
+            stock: 0,
+        };
+
+        setVariants((current) => [...current, newVariant]);
+    };
+
+    const handleRemoveVariant = (variant: ProductVariant) => {
+        setVariants((current) =>
+            current.filter((item) => item.id !== variant.id)
+        );
+    };
+
+    const handleVariantChange = (
+        id: number,
+        field: keyof ProductVariant,
+        value: string | number | null
+    ) => {
+        setVariants((current) =>
+            current.map((variant) =>
+                variant.id === id
+                    ? { ...variant, [field]: value }
+                    : variant
+            )
+        );
     };
 
     useEffect(() => {
@@ -215,6 +251,14 @@ export default function AdminPage() {
                             </div>
                         )}
                     </div>
+
+                    <ProductVariantsEditor
+                        variants={variants}
+                        loading={loading}
+                        onAdd={handleAddVariant}
+                        onRemove={handleRemoveVariant}
+                        onChange={handleVariantChange}
+                    />
 
                     <button
                         type="submit"
