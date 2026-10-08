@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addProduct, deleteProduct, getProducts } from "../../services/productService";
+import { addProduct, addVariant, deleteProduct, getProducts } from "../../services/productService";
 import type { Product, ProductVariant } from "../../types/product.types";
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
@@ -89,26 +89,42 @@ export default function AdminPage() {
                     return;
                 }
             }
-            await addProduct({
-                name, description, price: price ? Number(price) : null, image: imageUrl,
+
+            const product = await addProduct({
+                name,
+                description,
+                price: price ? Number(price) : null,
+                image: imageUrl,
             });
+
+            for (const variant of variants) {
+                await addVariant({
+                    product_id: product.id,
+                    color: variant.color,
+                    size: variant.size,
+                    price: variant.price,
+                    sku: variant.sku,
+                    stock: variant.stock,
+                });
+            }
 
             setName("");
             setDescription("");
             setPrice("");
             setImageFile(null);
             setPreview(null);
+            setVariants([]);
 
             await loadProducts();
 
             alert("Skapad");
         } catch (err) {
             console.log(err);
-            alert("Gick fel")
+            alert("Gick fel");
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const navigate = useNavigate();
 
