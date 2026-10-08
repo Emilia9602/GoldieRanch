@@ -24,18 +24,19 @@ export default function AdminNav() {
     return (
         <div className="max-w-xl mx-auto mb-6 flex gap-2">
             <div className="max-w-xl mx-auto flex gap-2 p-2 bg-[#EFE4D2] border border-[#D9BE95]/40 rounded-2xl shadow-sm">
+
                 <button
                     onClick={() => navigate("/admin")}
                     className={`${base} ${isActive("/admin") ? active : inactive}`}
                 >
-                    Lägg till
+                    Alla produkter
                 </button>
 
                 <button
-                    onClick={() => navigate("/admin/products")}
-                    className={`${base} ${isActive("/admin/products") ? active : inactive}`}
+                    onClick={() => navigate("/admin/add/product")}
+                    className={`${base} ${isActive("/admin/add/product") ? active : inactive}`}
                 >
-                    Alla produkter
+                    Lägg till
                 </button>
 
                 <button

@@ -5,7 +5,7 @@ import Navbar from "./pages/partials/navbar/Navbar";
 import LoginPage from "./pages/admin/LoginPage";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdminPage from "./pages/admin/AdminPage";
+import AdminPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
 import AdminProductsPage from "./pages/admin/AdminProductsPage";
 
@@ -20,7 +20,6 @@ import AdminProductsPage from "./pages/admin/AdminProductsPage";
 //Första sidan, fixa som vi vill ha
 //Hero på homepage?
 //Rabatt?
-//Admin, se alla produkter
 //Hur loggar vi in?
 //Kontakt sida
 //Anpassa lägg till till desktop
@@ -46,7 +45,7 @@ function App() {
 
           <Route path="/admin" element={
             <ProtectedRoute>
-              <AdminPage />
+              <AdminProductsPage />
             </ProtectedRoute>
           } />
 
@@ -57,10 +56,10 @@ function App() {
           } />
 
           <Route
-            path="/admin/products"
+            path="/admin/add/product"
             element={
               <ProtectedRoute>
-                <AdminProductsPage />
+                <AdminPage />
               </ProtectedRoute>
             }
           />
