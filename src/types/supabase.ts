@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          parent_id: number | null
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          parent_id?: number | null
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          parent_id?: number | null
+          slug?: string
+        }
+        Relationships: []
+      }
       product_variants: {
         Row: {
           color: string | null
@@ -55,6 +79,7 @@ export type Database = {
       products: {
         Row: {
           category: string | null
+          category_id: number | null
           created_at: string
           description: string | null
           id: number
@@ -65,6 +90,7 @@ export type Database = {
         }
         Insert: {
           category?: string | null
+          category_id?: number | null
           created_at?: string
           description?: string | null
           id?: number
@@ -75,6 +101,7 @@ export type Database = {
         }
         Update: {
           category?: string | null
+          category_id?: number | null
           created_at?: string
           description?: string | null
           id?: number
@@ -83,7 +110,15 @@ export type Database = {
           name?: string | null
           price?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

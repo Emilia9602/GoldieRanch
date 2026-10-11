@@ -1,5 +1,5 @@
 import { supabase } from "../lib/supabase";
-import type { Product, ProductInsert, ProductUpdate, ProductVariantInsert, ProductVariantUpdate } from "../types/product.types";
+import type { Category, CategoryInsert, Product, ProductInsert, ProductUpdate, ProductVariantInsert, ProductVariantUpdate } from "../types/product.types";
 
 export async function getProducts(): Promise<Product[]> {
     const { data, error } = await supabase
@@ -106,4 +106,27 @@ export async function deleteVariant(id: number) {
         .eq("id", id);
 
     if (error) throw error;
+}
+
+export async function getCategories(): Promise<Category[]> {
+    const { data, error } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
+
+    if (error) throw error;
+
+    return data;
+}
+
+export async function addCategory(category: CategoryInsert) {
+    const { data, error } = await supabase
+        .from("categories")
+        .insert(category)
+        .select()
+        .single();
+
+    if (error) throw error;
+
+    return data;
 }

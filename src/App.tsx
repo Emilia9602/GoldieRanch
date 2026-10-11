@@ -8,6 +8,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import EditProductPage from "./pages/admin/EditProductPage";
 import AdminProductsPage from "./pages/admin/AdminProductsPage";
 import AddProductPage from "./pages/admin/AddProductPage";
+import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -60,6 +61,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <AddProductPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/categories"
+            element={
+              <ProtectedRoute>
+                <AdminCategoriesPage />
               </ProtectedRoute>
             }
           />
