@@ -24,7 +24,8 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Hur loggar vi in?
 //Kontakt sida
 //Anpassa lägg till till desktop
-//Error, loading state bättre, komponenter 
+//Error, loading state bättre, komponenter, confim också
+//Styla kategori sidan
 //Annat än alerts
 //Not found page
 //Login ska ha egen länk till oss att komma direkt till
