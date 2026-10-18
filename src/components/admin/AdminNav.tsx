@@ -40,6 +40,13 @@ export default function AdminNav() {
                 </button>
 
                 <button
+                    onClick={() => navigate("/admin/categories")}
+                    className={`${base} ${isActive("/admin/categories") ? active : inactive}`}
+                >
+                    Kategorier
+                </button>
+
+                <button
                     onClick={handleLogout}
                     className="px-4 py-2 rounded-xl text-sm font-semibold border border-[#E7B4B4] text-[#B85C5C] bg-[#F8F4EC] hover:bg-[#F4DADA] transition-all duration-150"
                 >
