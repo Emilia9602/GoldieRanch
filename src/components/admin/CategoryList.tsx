@@ -11,6 +11,7 @@ export default function CategoryList({ categories, onChanged }: Props) {
     const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
     const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null);
     const [editName, setEditName] = useState("");
+    const [editParentId, setEditParentId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
 
     const parentCategories = categories.filter(
@@ -28,37 +29,61 @@ export default function CategoryList({ categories, onChanged }: Props) {
     function startEditingCategory(category: Category) {
         setEditingCategoryId(category.id);
         setEditName(category.name);
+        setEditParentId(category.parent_id);
 
-        setExpandedCategories((current) =>
-            current.includes(category.id)
-                ? current
-                : [...current, category.id]
-        );
+        if (category.parent_id !== null) {
+            setExpandedCategories((current) =>
+                current.includes(category.parent_id!)
+                    ? current
+                    : [...current, category.parent_id!]);
+        } else {
+            setExpandedCategories((current) =>
+                current.includes(category.id)
+                    ? current
+                    : [...current, category.id]);
+        }
     }
 
     function cancelEditingCategory() {
         setEditingCategoryId(null);
         setEditName("");
+        setEditParentId(null);
     }
 
-    async function handleUpdateCategory(id: number) {
+    async function handleUpdateCategory(category: Category, isSubcategory: boolean) {
 
-        if (!editName) return;
+        if (
+            isSubcategory &&
+            (editParentId === null || !parentCategories.some(
+                (parent) => parent.id === editParentId))
+        ) {
+            alert("Välj en giltig huvudkategori.");
+            return;
+        }
 
         setLoading(true);
 
         try {
-            await updateCategory(id, {
+            await updateCategory(category.id, {
                 name: editName,
+                ...(isSubcategory
+                    ? { parent_id: editParentId }
+                    : {}),
             });
 
             cancelEditingCategory();
             await onChanged();
 
-            alert("Kategorin har uppdaterats!");
+            alert(
+                isSubcategory
+                    ? "Underkategorin har uppdaterats!"
+                    : "Huvudkategorin har uppdaterats!"
+            );
         } catch (error) {
             console.error("Kunde inte uppdatera kategori:", error);
-            alert("Kunde inte uppdatera kategorin.");
+            alert(
+                "Kunde inte uppdatera kategorin. Kontrollera att ändringen är giltig."
+            );
         } finally {
             setLoading(false);
         }
@@ -76,6 +101,10 @@ export default function CategoryList({ categories, onChanged }: Props) {
         try {
             await deleteCategory(id);
             await onChanged();
+
+            if (editingCategoryId === id) {
+                cancelEditingCategory();
+            }
 
             alert("Underkategorin har tagits bort!");
         } catch (error) {
@@ -149,7 +178,8 @@ export default function CategoryList({ categories, onChanged }: Props) {
                                                 onSubmit={(e) => {
                                                     e.preventDefault();
                                                     void handleUpdateCategory(
-                                                        category.id
+                                                        category,
+                                                        false
                                                     );
                                                 }}
                                                 className="space-y-2"
@@ -169,15 +199,19 @@ export default function CategoryList({ categories, onChanged }: Props) {
                                                     className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] text-sm outline-none focus:border-[#D9BE95]"
                                                 />
 
+                                                <p className="text-xs text-[#6B625A]">
+                                                    Slug ändras inte:{" "}
+                                                    {category.slug}
+                                                </p>
+
+
                                                 <div className="flex gap-2">
                                                     <button
                                                         type="submit"
                                                         disabled={loading}
                                                         className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
                                                     >
-                                                        {loading
-                                                            ? "Sparar..."
-                                                            : "Spara"}
+                                                        {loading ? "Sparar..." : "Spara"}
                                                     </button>
 
                                                     <button
@@ -196,36 +230,133 @@ export default function CategoryList({ categories, onChanged }: Props) {
                                         </p>
 
                                         {children.length > 0 ? (
-                                            children.map((child) => (
-                                                <div
-                                                    key={child.id}
-                                                    className="flex items-center gap-2 pl-3 py-2 border-l-2 border-[#D9BE95]/60"
-                                                >
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium">
-                                                            {child.name}
-                                                        </p>
+                                            children.map((child) => {
+                                                const isEditingChild = editingCategoryId === child.id;
 
-                                                        <p className="text-xs text-[#6B625A]">
-                                                            {child.slug}
-                                                        </p>
-                                                    </div>
-
-                                                    <button
-                                                        type="button"
-                                                        disabled={loading}
-                                                        onClick={() =>
-                                                            void handleDeleteCategory(
-                                                                child.id,
-                                                                child.name
-                                                            )
-                                                        }
-                                                        className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100 disabled:opacity-50"
+                                                return (
+                                                    <div
+                                                        key={child.id}
+                                                        className="pl-3 py-2 border-l-2 border-[#D9BE95]/60 space-y-3"
                                                     >
-                                                        Ta bort
-                                                    </button>
-                                                </div>
-                                            ))
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-sm font-medium">
+                                                                    {child.name}
+                                                                </p>
+
+                                                                <p className="text-xs text-[#6B625A]">
+                                                                    {child.slug}
+                                                                </p>
+                                                            </div>
+
+                                                            <button
+                                                                type="button"
+                                                                disabled={loading}
+                                                                onClick={() => startEditingCategory(child)}
+                                                                className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
+                                                            >
+                                                                Redigera
+                                                            </button>
+
+                                                            <button
+                                                                type="button"
+                                                                disabled={loading}
+                                                                onClick={() => void handleDeleteCategory(child.id, child.name)}
+                                                                className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100 disabled:opacity-50"
+                                                            >
+                                                                Ta bort
+                                                            </button>
+                                                        </div>
+
+                                                        {isEditingChild && (
+                                                            <form
+                                                                onSubmit={(e) => {
+                                                                    e.preventDefault();
+                                                                    void handleUpdateCategory(child, true);
+                                                                }}
+                                                                className="space-y-3 rounded-lg bg-[#FAF7F2] border border-[#D9BE95]/40 p-3"
+                                                            >
+                                                                <div>
+                                                                    <label
+                                                                        htmlFor={`edit-child-name-${child.id}`}
+                                                                        className="block text-xs uppercase tracking-wider text-[#8C6843] mb-1"
+                                                                    >
+                                                                        Underkategorins namn
+                                                                    </label>
+
+                                                                    <input
+                                                                        id={`edit-child-name-${child.id}`}
+                                                                        value={editName}
+                                                                        onChange={(e) => setEditName(e.target.value)}
+                                                                        required
+                                                                        className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-white text-sm outline-none focus:border-[#D9BE95]"
+                                                                    />
+                                                                </div>
+
+                                                                <div>
+                                                                    <label
+                                                                        htmlFor={`edit-child-parent-${child.id}`}
+                                                                        className="block text-xs uppercase tracking-wider text-[#8C6843] mb-1"
+                                                                    >
+                                                                        Huvudkategori
+                                                                    </label>
+
+                                                                    <select
+                                                                        id={`edit-child-parent-${child.id}`}
+                                                                        value={editParentId ?? ""}
+                                                                        onChange={(e) => setEditParentId(e.target.value
+                                                                            ? Number(e.target.value)
+                                                                            : null
+                                                                        )
+                                                                        }
+                                                                        required
+                                                                        className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-white text-sm outline-none focus:border-[#D9BE95]"
+                                                                    >
+                                                                        <option value="">
+                                                                            Välj huvudkategori
+                                                                        </option>
+
+                                                                        {parentCategories.map((parent) => (
+                                                                            <option
+                                                                                key={parent.id}
+                                                                                value={parent.id}
+                                                                            >
+                                                                                {parent.name}
+                                                                            </option>
+                                                                        )
+                                                                        )}
+                                                                    </select>
+                                                                </div>
+
+                                                                <p className="text-xs text-[#6B625A]">
+                                                                    Slug ändras
+                                                                    inte:{" "}
+                                                                    {child.slug}
+                                                                </p>
+
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        type="submit"
+                                                                        disabled={loading || editParentId === null}
+                                                                        className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
+                                                                    >
+                                                                        {loading ? "Sparar..." : "Spara"}
+                                                                    </button>
+
+                                                                    <button
+                                                                        type="button"
+                                                                        disabled={loading}
+                                                                        onClick={cancelEditingCategory}
+                                                                        className="text-xs px-3 py-1 rounded-lg border border-[#D9BE95]/50 hover:bg-[#EAE4D9] disabled:opacity-50"
+                                                                    >
+                                                                        Avbryt
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })
                                         ) : (
                                             <p className="text-xs text-[#6B625A]">
                                                 Inga underkategorier ännu.
