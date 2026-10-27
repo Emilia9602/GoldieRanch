@@ -5,6 +5,7 @@ import type { ProductVariant, ProductWithVariants } from "../../types/product.ty
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
+import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
 
 export default function AddProductPage() {
     const [name, setName] = useState("");
@@ -15,6 +16,7 @@ export default function AddProductPage() {
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<ProductWithVariants[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
 
     const loadProducts = async () => {
         const data = await getProductsWithVariants();
@@ -95,6 +97,7 @@ export default function AddProductPage() {
                 description,
                 price: price ? Number(price) : null,
                 image: imageUrl,
+                category_id: categoryId,
             });
 
             for (const variant of variants) {
@@ -111,6 +114,7 @@ export default function AddProductPage() {
             setName("");
             setDescription("");
             setPrice("");
+            setCategoryId(null);
             setImageFile(null);
             setPreview(null);
             setVariants([]);
@@ -197,6 +201,12 @@ export default function AddProductPage() {
                             className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] placeholder:text-[#8C6843] outline-none focus:border-[#D9BE95] text-sm"
                         />
                     </div>
+
+                    <ProductCategorySelect
+                        value={categoryId}
+                        onChange={setCategoryId}
+                        disabled={loading}
+                    />
 
                     <div className="mb-3">
                         <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">

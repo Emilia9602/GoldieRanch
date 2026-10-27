@@ -301,31 +301,50 @@ export default function CategoryList({ categories, onChanged }: Props) {
                                                                         Huvudkategori
                                                                     </label>
 
-                                                                    <select
-                                                                        id={`edit-child-parent-${child.id}`}
-                                                                        value={editParentId ?? ""}
-                                                                        onChange={(e) => setEditParentId(e.target.value
-                                                                            ? Number(e.target.value)
-                                                                            : null
-                                                                        )
-                                                                        }
-                                                                        required
-                                                                        className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-white text-sm outline-none focus:border-[#D9BE95]"
-                                                                    >
-                                                                        <option value="">
-                                                                            Välj huvudkategori
-                                                                        </option>
 
-                                                                        {parentCategories.map((parent) => (
-                                                                            <option
-                                                                                key={parent.id}
-                                                                                value={parent.id}
-                                                                            >
-                                                                                {parent.name}
+                                                                    <div className="relative">
+                                                                        <select
+                                                                            id={`edit-child-parent-${child.id}`}
+                                                                            value={editParentId ?? ""}
+                                                                            onChange={(e) =>
+                                                                                setEditParentId(
+                                                                                    e.target.value ? Number(e.target.value) : null
+                                                                                )
+                                                                            }
+                                                                            required
+                                                                            className="w-full appearance-none px-3 py-2 pr-9 rounded-lg border border-[#D9BE95]/50 bg-white text-sm text-[#342D26] outline-none focus:border-[#8C6843]"
+                                                                        >
+                                                                            <option value="">
+                                                                                Välj huvudkategori
                                                                             </option>
-                                                                        )
-                                                                        )}
-                                                                    </select>
+
+                                                                            {parentCategories.map((parent) => (
+                                                                                <option
+                                                                                    key={parent.id}
+                                                                                    value={parent.id}
+                                                                                >
+                                                                                    {parent.name}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+
+                                                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#8C6843]">
+                                                                            <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                width="16"
+                                                                                height="16"
+                                                                                viewBox="0 0 24 24"
+                                                                                fill="none"
+                                                                                stroke="currentColor"
+                                                                                strokeWidth="1.8"
+                                                                                strokeLinecap="round"
+                                                                                strokeLinejoin="round"
+                                                                            >
+                                                                                <path d="m6 9 6 6 6-6" />
+                                                                            </svg>
+                                                                        </span>
+                                                                    </div>
+
                                                                 </div>
 
                                                                 <p className="text-xs text-[#6B625A]">

@@ -100,29 +100,49 @@ export default function CategoryForm({ parentCategories, onCreated }: Props) {
                         Huvudkategori
                     </label>
 
-                    <select
-                        id="category-parent"
-                        value={parentId ?? ""}
-                        onChange={(e) =>
-                            setParentId(
-                                e.target.value
-                                    ? Number(e.target.value)
-                                    : null
-                            )
-                        }
-                        className="w-full px-4 py-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm outline-none focus:border-[#D9BE95]"
-                    >
-                        <option value="">Ingen</option>
 
-                        {parentCategories.map((category) => (
-                            <option
-                                key={category.id}
-                                value={category.id}
+                    <div className="relative">
+                        <select
+                            id="category-parent"
+                            value={parentId ?? ""}
+                            onChange={(e) =>
+                                setParentId(
+                                    e.target.value
+                                        ? Number(e.target.value)
+                                        : null
+                                )
+                            }
+                            className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] text-sm text-[#342D26] outline-none focus:border-[#8C6843]"
+                        >
+                            <option value="">Ingen</option>
+
+                            {parentCategories.map((category) => (
+                                <option
+                                    key={category.id}
+                                    value={category.id}
+                                >
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#8C6843]">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                             >
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </span>
+                    </div>
+
                 </div>
 
                 <button

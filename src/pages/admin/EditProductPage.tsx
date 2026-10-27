@@ -5,6 +5,7 @@ import { addVariant, deleteVariant, getProductWithVariantsById, updateProduct, u
 import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
+import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
 
 export default function EditProductPage() {
     const { id } = useParams();
@@ -95,6 +96,7 @@ export default function EditProductPage() {
                 description: product.description,
                 price: product.price,
                 image: imageUrl,
+                category_id: product.category_id,
             });
 
             for (const variantId of deletedVariantIds) {
@@ -213,7 +215,15 @@ export default function EditProductPage() {
                     />
                 </div>
 
-                <div className="mb-3">
+                <ProductCategorySelect
+                    value={product.category_id ?? null}
+                    onChange={(categoryId) =>
+                        setProduct({ ...product, category_id: categoryId })
+                    }
+                    disabled={loading}
+                />
+
+                <div className="mb-3 mt-4">
                     <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
                         Bild
                     </label>
