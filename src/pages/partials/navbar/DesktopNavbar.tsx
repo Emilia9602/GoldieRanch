@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import LogoutButton from "../../../components/admin/LogoutButton";
 
 export default function DesktopNavbar() {
     const location = useLocation();
@@ -47,12 +48,21 @@ export default function DesktopNavbar() {
                     </Link>
 
                     {role === "admin" && (
-                        <Link to="/admin" className={linkStyle(isActive("/admin"))}>
-                            Admin
-                        </Link>
+                        <>
+                            <Link
+                                to="/admin"
+                                className={linkStyle(isActive("/admin"))}
+                            >
+                                Admin
+                            </Link>
+
+                            <LogoutButton
+                                className="relative inline-flex items-center gap-2 cursor-pointer text-[12px] uppercase tracking-[0.2em] font-semibold text-[#9B6257] transition-all duration-200 hover:text-[#B85C5C] hover:scale-105 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#B85C5C] after:transition-all after:duration-300 hover:after:w-full whitespace-nowrap"
+                            />
+                        </>
                     )}
                 </div>
             </div>
         </nav>
-    )
+    );
 }

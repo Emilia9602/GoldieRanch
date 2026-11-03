@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import LogoutButton from "../../../components/admin/LogoutButton";
 
 export default function MobileNavigation() {
     const [open, setOpen] = useState(false);
@@ -245,6 +246,15 @@ export default function MobileNavigation() {
                                 Kategorier kommer här när sortimentet är uppbyggt.
                             </div>
                         </div>
+
+                        {role === "admin" && (
+                            <div className="mt-4 pt-4 border-t border-[#E5DFD5]">
+                                <LogoutButton
+                                    onRequestLogout={closeMenu}
+                                    className="w-full min-h-11 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-[#E7B4B4] bg-[#FAF7F2] text-sm font-semibold text-[#9B6257] transition-colors hover:bg-[#F4DADA]"
+                                />
+                            </div>
+                        )}
 
                         <button
                             type="button"

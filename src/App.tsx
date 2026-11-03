@@ -21,17 +21,16 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Första sidan, fixa som vi vill ha
 //Hero på homepage?
 //Rabatt?
-//Anpassa till mobil
 //Hur loggar vi in?
 //Kontakt sida
 //Retur sida
-//I dropdowns, kolla pilens position
 //Anpassa lägg till till desktop
 //Error, loading state bättre, komponenter, confim också
 //Styla kategori sidan
 //Annat än alerts
 //Not found page
 //Login ska ha egen länk till oss att komma direkt till
+//Badges, mest populär eller liknande. Lägg in logik direkt för det
 
 function App() {
   return (
