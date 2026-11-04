@@ -14,19 +14,16 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Sök ska funka
 //Footer
 //Modaler istället för alert på delete
-//Kolla hover på admin lägg till knapp, som ska va samma överallt
 //Ladda upp flera bilder
-//Navigering till admin, anpassat
+//Navigering för admin, ordrar senare? Vad behövs för säkerhet?
 //En produktsida
 //Första sidan, fixa som vi vill ha
 //Hero på homepage?
 //Rabatt?
-//Hur loggar vi in?
 //Kontakt sida
 //Retur sida
-//Anpassa lägg till till desktop
 //Error, loading state bättre, komponenter, confim också
-//Styla kategori sidan
+//Ska det heta "shop" eller något annat?
 //Annat än alerts
 //Not found page
 //Login ska ha egen länk till oss att komma direkt till

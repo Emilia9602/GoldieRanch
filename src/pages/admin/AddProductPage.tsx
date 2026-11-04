@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { addProduct, addVariant, deleteProduct, getProductsWithVariants } from "../../services/productService";
 import type { ProductVariant, ProductWithVariants } from "../../types/product.types";
@@ -11,12 +11,15 @@ export default function AddProductPage() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [previews, setPreviews] = useState<string[]>([]);
+    const previewsRef = useRef<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<ProductWithVariants[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
     const [categoryId, setCategoryId] = useState<number | null>(null);
+
+    const navigate = useNavigate();
 
     const loadProducts = async () => {
         const data = await getProductsWithVariants();
@@ -68,26 +71,32 @@ export default function AddProductPage() {
     }, []);
 
     useEffect(() => {
+        previewsRef.current = previews;
+    }, [previews]);
+
+    useEffect(() => {
         return () => {
-            if (preview) {
+            previewsRef.current.forEach((preview) => {
                 URL.revokeObjectURL(preview);
-            }
+            });
         };
-    }, [preview]);
+    }, []);
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            let imageUrl: string | null = null;
+            let imageUrls: string[] = [];
 
-            if (imageFile) {
+            if (imageFiles.length > 0) {
                 try {
-                    imageUrl = await uploadImage(imageFile);
+                    imageUrls = await Promise.all(
+                        imageFiles.map((file) => uploadImage(file))
+                    );
                 } catch (err) {
                     console.log(err);
-                    alert("Bild kunde inte laddas upp");
+                    alert("En eller flera bilder kunde inte laddas upp");
                     return;
                 }
             }
@@ -96,7 +105,8 @@ export default function AddProductPage() {
                 name,
                 description,
                 price: price ? Number(price) : null,
-                image: imageUrl,
+                image: imageUrls[0] ?? null,
+                images: imageUrls.slice(1),
                 category_id: categoryId,
             });
 
@@ -111,17 +121,22 @@ export default function AddProductPage() {
                 });
             }
 
+            previews.forEach((preview) => {
+                URL.revokeObjectURL(preview);
+            });
+
             setName("");
             setDescription("");
             setPrice("");
             setCategoryId(null);
-            setImageFile(null);
-            setPreview(null);
+            setImageFiles([]);
+            setPreviews([]);
             setVariants([]);
 
             await loadProducts();
 
             alert("Skapad");
+
         } catch (err) {
             console.log(err);
             alert("Gick fel");
@@ -129,8 +144,6 @@ export default function AddProductPage() {
             setLoading(false);
         }
     };
-
-    const navigate = useNavigate();
 
     const handleDelete = async (id: number) => {
         const confirmed = confirm("Ta bort denna produkt?");
@@ -216,16 +229,20 @@ export default function AddProductPage() {
                         <input
                             type="file"
                             accept="image/*"
+                            multiple
                             id="file-upload"
+                            disabled={loading}
                             onChange={(e) => {
-                                const file = e.target.files?.[0] || null;
-                                setImageFile(file);
+                                const files = Array.from(e.target.files ?? []);
 
-                                if (file) {
-                                    setPreview(URL.createObjectURL(file));
-                                } else {
-                                    setPreview(null);
-                                }
+                                const newPreviews = files.map((file) =>
+                                    URL.createObjectURL(file)
+                                );
+
+                                setImageFiles((current) => [...current, ...files]);
+                                setPreviews((current) => [...current, ...newPreviews]);
+
+                                e.target.value = "";
                             }}
                             className="hidden"
                             placeholder="Image of product"
@@ -235,10 +252,10 @@ export default function AddProductPage() {
                             htmlFor="file-upload"
                             className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl transition cursor-pointer
                                         ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#F3EBDD]"}
-                                        ${preview ? "border-[#CFB58C]" : "border-[#D9BE95]/60 bg-[#FAF6EE]"}`}
+                                        ${previews.length > 0 ? "border-[#CFB58C]" : "border-[#D9BE95]/60 bg-[#FAF6EE]"}`}
                         >
                             <span className="text-sm font-semibold text-[#8C6843]">
-                                {preview ? "Byt bild" : "Ladda upp produktbild"}
+                                {previews.length > 0 ? "Lägg till fler bilder" : "Ladda upp produktbilder"}
                             </span>
 
                             <span className="text-xs text-[#A89F94] mt-1">
@@ -246,34 +263,53 @@ export default function AddProductPage() {
                             </span>
                         </label>
 
-                        {preview && (
-                            <div className="mt-3 flex flex-col items-center gap-2">
-                                <p className="text-xs text-[#8C6843] uppercase tracking-wider">
+                        {previews.length > 0 && (
+                            <div className="mt-3">
+
+                                <p className="text-xs text-[#8C6843] uppercase tracking-wider text-center mb-3">
                                     Förhandsvisning
                                 </p>
 
-                                <img
-                                    src={preview}
-                                    alt="preview"
-                                    className="w-28 h-28 object-cover rounded-lg border border-[#D9BE95]/50"
-                                />
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 
-                                {imageFile && (
-                                    <p className="text-xs text-[#6B625A] text-center max-w-[140px] truncate">
-                                        {imageFile.name}
-                                    </p>
-                                )}
+                                    {previews.map((preview, index) => (
+                                        <div
+                                            key={preview}
+                                            className="flex flex-col items-center gap-2"
+                                        >
+                                            <img
+                                                src={preview}
+                                                alt={`Produktbild ${index + 1}`}
+                                                className="w-full aspect-square object-cover rounded-lg border border-[#D9BE95]/50"
+                                            />
 
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setImageFile(null);
-                                        setPreview(null);
-                                    }}
-                                    className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
-                                >
-                                    Ta bort
-                                </button>
+                                            <p className="text-xs text-[#6B625A]">
+                                                {index === 0
+                                                    ? "Huvudbild"
+                                                    : `Bild ${index + 1}`}
+                                            </p>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    URL.revokeObjectURL(preview);
+
+                                                    setImageFiles((current) =>
+                                                        current.filter((_, i) => i !== index)
+                                                    );
+
+                                                    setPreviews((current) =>
+                                                        current.filter((_, i) => i !== index)
+                                                    );
+                                                }}
+                                                className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
+                                            >
+                                                Ta bort
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                </div>
                             </div>
                         )}
                     </div>
