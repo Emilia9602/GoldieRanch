@@ -132,31 +132,6 @@ export default function MobileNavigation() {
                         <div className="grid grid-cols-3 gap-2 mt-3">
 
                             <Link
-                                to="/"
-                                onClick={closeMenu}
-                                className={quickLinkClass("/")}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    className="w-5 h-5"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="m2.25 12 9.75-9 9.75 9M4.5 10.5v9.75h15V10.5M9 20.25v-6h6v6"
-                                    />
-                                </svg>
-
-                                <span className="text-[10px] uppercase tracking-wider font-semibold">
-                                    Hem
-                                </span>
-                            </Link>
-
-                            <Link
                                 to="/shop"
                                 onClick={closeMenu}
                                 className={quickLinkClass("/shop")}
@@ -182,9 +157,9 @@ export default function MobileNavigation() {
                             </Link>
 
                             <Link
-                                to="/contact"
+                                to="/treatments"
                                 onClick={closeMenu}
-                                className={quickLinkClass("/contact")}
+                                className={quickLinkClass("/treatments")}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -197,12 +172,38 @@ export default function MobileNavigation() {
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
-                                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                        d="M12 3.75 14.25 9.75 20.25 12 14.25 14.25 12 20.25 9.75 14.25 3.75 12 9.75 9.75 12 3.75Z"
                                     />
                                 </svg>
 
                                 <span className="text-[10px] uppercase tracking-wider font-semibold">
-                                    Kontakt
+                                    Behandlingar
+                                </span>
+                            </Link>
+
+                            <Link
+                                to="/sale"
+                                onClick={closeMenu}
+                                className={quickLinkClass("/sale")}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="1.5"
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m9 4.5 10.5 10.5-5.25 5.25L3.75 9.75V4.5H9Z"
+                                    />
+                                    <circle cx="7.125" cy="7.125" r=".75" fill="currentColor" />
+                                </svg>
+
+                                <span className="text-[10px] uppercase tracking-wider font-semibold">
+                                    Rea
                                 </span>
                             </Link>
 
@@ -233,17 +234,66 @@ export default function MobileNavigation() {
                                     </span>
                                 </Link>
                             )}
+
                         </div>
 
                         <div className="mt-5 rounded-xl bg-[#FAF7F2] border border-[#E5DFD5] overflow-hidden">
+
                             <div className="px-3.5 py-2 bg-[#D9BE95]/40 border-b border-[#E5DFD5]">
                                 <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#342D26]">
                                     Produktkategorier
                                 </span>
                             </div>
 
-                            <div className="px-3.5 py-3 text-xs text-[#6F5D48]">
-                                Kategorier kommer här när sortimentet är uppbyggt.
+                            <div className="p-3.5">
+                                <Link
+                                    to="/shop"
+                                    onClick={closeMenu}
+                                    className="block text-xs font-semibold text-[#6F5D48] hover:text-[#342D26] transition-colors"
+                                >
+                                    Alla produkter
+                                </Link>
+
+                                <p className="mt-2 text-xs text-[#8C6843]">
+                                    Kategorier kommer här när sortimentet är uppbyggt.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 rounded-xl bg-[#FAF7F2] border border-[#E5DFD5] overflow-hidden">
+
+                            <div className="px-3.5 py-2 bg-[#D9BE95]/40 border-b border-[#E5DFD5]">
+                                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#342D26]">
+                                    Information
+                                </span>
+                            </div>
+
+                            <div className="divide-y divide-[#E5DFD5]">
+
+                                <Link
+                                    to="/about-us"
+                                    onClick={closeMenu}
+                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                >
+                                    Om oss
+                                </Link>
+
+                                <Link
+                                    to="/contact"
+                                    onClick={closeMenu}
+                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                >
+                                    Kontakta oss
+                                </Link>
+
+                                <Link
+                                    to="/returns"
+                                    onClick={closeMenu}
+                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                >
+                                    Retur & reklamation
+                                </Link>
+
                             </div>
                         </div>
 

@@ -20,15 +20,14 @@ import NotFoundPage from "./pages/NotFoundPage";
 //Första sidan, fixa som vi vill ha
 //Städa kod i admin, dela upp mer?
 //Hero på homepage?
-//Rabatt?
+//Rabatt? Rea
 //Behandlings sida, info
 //Presentkort - lägg in
 //Kontakt sida
 //Retur sida
 //Ska det heta "shop" eller något annat?
-//Not found page
 //Login ska ha egen länk till oss att komma direkt till
-//Badges, mest populär, nyhet eller liknande. Lägg in logik direkt för det
+//Badges, populär, nyhet, rea, slutsåld, limited addition. Lägg in logik  för det
 
 function App() {
   return (
