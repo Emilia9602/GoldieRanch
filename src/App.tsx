@@ -9,6 +9,7 @@ import EditProductPage from "./pages/admin/EditProductPage";
 import AdminProductsPage from "./pages/admin/AdminProductsPage";
 import AddProductPage from "./pages/admin/AddProductPage";
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -73,6 +74,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
