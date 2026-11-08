@@ -104,7 +104,7 @@ export default function ModalAlert({ modal, onClose }: Props) {
                             onClick={onClose}
                             className="min-h-11 rounded-xl border border-[#D9BE95]/50 bg-[#D9BE95] px-5 py-2 text-sm font-semibold text-[#342D26] transition-colors hover:bg-[#CFB58C]"
                         >
-                            Okej
+                            Tack
                         </button>
                     )}
                 </div>

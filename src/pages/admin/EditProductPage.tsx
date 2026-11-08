@@ -6,6 +6,8 @@ import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
+import type { ModalAlertData } from "../../components/admin/ModalAlert";
+import ModalAlert from "../../components/admin/ModalAlert";
 
 type ProductImage = {
     id: string;
@@ -21,6 +23,7 @@ export default function EditProductPage() {
     const [images, setImages] = useState<ProductImage[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
     const [deletedVariantIds, setDeletedVariantIds] = useState<number[]>([]);
+    const [modal, setModal] = useState<ModalAlertData | null>(null);
 
     const imagesRef = useRef<ProductImage[]>([]);
 
@@ -49,7 +52,12 @@ export default function EditProductPage() {
                 );
             } catch (err) {
                 console.log(err);
-                alert("Kunde ej hämta produkt");
+
+                setModal({
+                    type: "error",
+                    title: "Kunde inte hämta produkten",
+                    message: "Något gick fel när produkten skulle hämtas. Försök igen.",
+                });
             } finally {
                 setFetching(false);
             }
@@ -184,10 +192,19 @@ export default function EditProductPage() {
                 }))
             );
 
-            alert("Uppdaterad");
+            setModal({
+                type: "success",
+                title: "Produkten har uppdaterats!",
+                message: "Dina ändringar har sparats.",
+            });
         } catch (err) {
             console.log(err);
-            alert("Kunde ej spara");
+
+            setModal({
+                type: "error",
+                title: "Kunde inte spara",
+                message: "Något gick fel när produkten skulle uppdateras. Försök igen.",
+            });
         } finally {
             setLoading(false);
         }
@@ -203,8 +220,15 @@ export default function EditProductPage() {
 
     if (!product) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
-                <p className="text-sm text-red-500">Produkt hittades inte</p>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF6EE]">
+                <p className="text-sm text-red-500">
+                    Produkt hittades inte
+                </p>
+
+                <ModalAlert
+                    modal={modal}
+                    onClose={() => setModal(null)}
+                />
             </div>
         );
     }
@@ -411,6 +435,11 @@ export default function EditProductPage() {
                     {loading ? "Sparar..." : "Spara ändringar"}
                 </button>
             </div>
-        </div >
-    )
+
+            <ModalAlert
+                modal={modal}
+                onClose={() => setModal(null)}
+            />
+        </div>
+    );
 }
