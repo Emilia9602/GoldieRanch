@@ -6,6 +6,8 @@ import AdminNav from "../../components/admin/AdminNav";
 import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
+import type { ModalAlertData } from "../../components/admin/ModalAlert";
+import ModalAlert from "../../components/admin/ModalAlert";
 
 export default function AddProductPage() {
     const [name, setName] = useState("");
@@ -13,11 +15,13 @@ export default function AddProductPage() {
     const [price, setPrice] = useState("");
     const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
-    const previewsRef = useRef<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [latestProducts, setLatestProducts] = useState<ProductWithVariants[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
     const [categoryId, setCategoryId] = useState<number | null>(null);
+    const [modal, setModal] = useState<ModalAlertData | null>(null);
+
+    const previewsRef = useRef<string[]>([]);
 
     const navigate = useNavigate();
 
@@ -96,7 +100,11 @@ export default function AddProductPage() {
                     );
                 } catch (err) {
                     console.log(err);
-                    alert("En eller flera bilder kunde inte laddas upp");
+                    setModal({
+                        type: "error",
+                        title: "Bilderna kunde inte laddas upp",
+                        message: "En eller flera bilder kunde inte laddas upp. Försök igen.",
+                    });
                     return;
                 }
             }
@@ -135,29 +143,59 @@ export default function AddProductPage() {
 
             await loadProducts();
 
-            alert("Skapad");
+            setModal({
+                type: "success",
+                title: "Produkten har skapats!",
+                message: "Din nya produkt har sparats.",
+            });
 
         } catch (err) {
             console.log(err);
-            alert("Gick fel");
+            setModal({
+                type: "error",
+                title: "Något gick fel",
+                message: "Produkten kunde inte sparas. Försök igen.",
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDelete = async (id: number) => {
-        const confirmed = confirm("Ta bort denna produkt?");
-        if (!confirmed) return;
+    const confirmDelete = async (id: number) => {
+        setModal(null);
 
         try {
             await deleteProduct(id);
-
             await loadProducts();
+
+            setModal({
+                type: "success",
+                title: "Produkten har tagits bort",
+                message: "Produkten har tagits bort från sortimentet.",
+            });
+
         } catch (err) {
             console.log(err);
-            alert("Kunde ej ta bort");
+
+            setModal({
+                type: "error",
+                title: "Kunde inte ta bort produkten",
+                message: "Något gick fel när produkten skulle tas bort.",
+            });
         }
-    }
+    };
+
+    const handleDelete = (id: number) => {
+        setModal({
+            type: "confirm",
+            title: "Ta bort produkten?",
+            message: "Är du säker på att du vill ta bort denna produkt?",
+            confirmText: "Ta bort",
+            onConfirm: () => {
+                void confirmDelete(id);
+            },
+        });
+    };
 
     return (
         <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 text-[#342D26]">
@@ -416,6 +454,11 @@ export default function AddProductPage() {
                     ))}
                 </div>
             </div>
+
+            <ModalAlert
+                modal={modal}
+                onClose={() => setModal(null)}
+            />
         </div>
     )
 }

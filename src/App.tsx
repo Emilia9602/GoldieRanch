@@ -14,10 +14,10 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Sök ska funka
 //Footer
 //Modaler istället för alert på delete
-//Ladda upp flera bilder
-//Navigering för admin, ordrar senare? Vad behövs för säkerhet?
+//Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida
 //Första sidan, fixa som vi vill ha
+//Städa kod i admin, dela upp mer?
 //Hero på homepage?
 //Rabatt?
 //Kontakt sida
@@ -27,7 +27,7 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Annat än alerts
 //Not found page
 //Login ska ha egen länk till oss att komma direkt till
-//Badges, mest populär eller liknande. Lägg in logik direkt för det
+//Badges, mest populär, nyhet eller liknande. Lägg in logik direkt för det
 
 function App() {
   return (
