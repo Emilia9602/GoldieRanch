@@ -5,10 +5,13 @@ import { deleteProduct, getProductsWithVariants } from "../../services/productSe
 import AdminNav from "../../components/admin/AdminNav";
 import type { ModalAlertData } from "../../components/admin/ModalAlert";
 import ModalAlert from "../../components/admin/ModalAlert";
+import Loading from "../../components/loadingError/Loading";
+import ErrorState from "../../components/loadingError/ErrorState";
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState<ProductWithVariants[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(false);
     const [modal, setModal] = useState<ModalAlertData | null>(null);
 
     const navigate = useNavigate();
@@ -16,6 +19,7 @@ export default function AdminProductsPage() {
     const loadProducts = async () => {
         try {
             setLoading(true);
+            setLoadError(false);
             const data = await getProductsWithVariants();
 
             const sorted = data.sort(
@@ -25,6 +29,10 @@ export default function AdminProductsPage() {
             );
 
             setProducts(sorted);
+        } catch (err) {
+            console.log(err);
+            setLoadError(true);
+
         } finally {
             setLoading(false);
         }
@@ -76,10 +84,17 @@ export default function AdminProductsPage() {
     };
 
     if (loading) {
+        return <Loading message="Laddar produkter..." />;
+    }
+
+    if (loadError) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
-                <p className="text-sm text-[#8C6843]">Laddar produkter...</p>
-            </div>
+            <ErrorState
+                message="Vi kunde inte hämta produkterna just nu. Försök igen."
+                onRetry={() => {
+                    void loadProducts();
+                }}
+            />
         );
     }
 

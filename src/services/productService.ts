@@ -60,7 +60,7 @@ export async function getProductWithVariantsById(id: number) {
         .from("products")
         .select(`*, product_variants (*)`)
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
     if (error) throw error;
     return data;

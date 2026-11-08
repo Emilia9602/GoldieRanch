@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { ProductVariant, ProductWithVariants } from "../../types/product.types";
 import { addVariant, deleteVariant, getProductWithVariantsById, updateProduct, updateVariant } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
@@ -8,6 +8,9 @@ import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor"
 import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
 import type { ModalAlertData } from "../../components/admin/ModalAlert";
 import ModalAlert from "../../components/admin/ModalAlert";
+import Loading from "../../components/loadingError/Loading";
+import ErrorState from "../../components/loadingError/ErrorState";
+import NotFound from "../../components/loadingError/NotFound";
 
 type ProductImage = {
     id: string;
@@ -20,6 +23,8 @@ export default function EditProductPage() {
     const [product, setProduct] = useState<ProductWithVariants | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [loadError, setLoadError] = useState(false);
+    const [retryCount, setRetryCount] = useState(0);
     const [images, setImages] = useState<ProductImage[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
     const [deletedVariantIds, setDeletedVariantIds] = useState<number[]>([]);
@@ -27,14 +32,29 @@ export default function EditProductPage() {
 
     const imagesRef = useRef<ProductImage[]>([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const loadProduct = async () => {
-            if (!id) return;
+            if (!id) {
+                setLoadError(true);
+                setFetching(false);
+                return;
+            }
 
             setFetching(true);
+            setLoadError(false);
 
             try {
                 const data = await getProductWithVariantsById(Number(id));
+
+                if (!data) {
+                    setProduct(null);
+                    setVariants([]);
+                    setImages([]);
+                    return;
+                }
+
                 setProduct(data);
                 setVariants(data.product_variants ?? []);
 
@@ -52,19 +72,14 @@ export default function EditProductPage() {
                 );
             } catch (err) {
                 console.log(err);
-
-                setModal({
-                    type: "error",
-                    title: "Kunde inte hämta produkten",
-                    message: "Något gick fel när produkten skulle hämtas. Försök igen.",
-                });
+                setLoadError(true);
             } finally {
                 setFetching(false);
             }
         };
 
-        loadProduct();
-    }, [id]);
+        void loadProduct();
+    }, [id, retryCount]);
 
     useEffect(() => {
         imagesRef.current = images;
@@ -211,25 +226,29 @@ export default function EditProductPage() {
     }
 
     if (fetching) {
+        return (<Loading message="Laddar produkt..." />)
+    }
+
+    if (loadError) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
-                <p className="text-sm text-[#8C6843]">Laddar produkt...</p>
-            </div>
-        )
+            <ErrorState
+                message="Vi kunde inte hämta produkten just nu. Försök igen."
+                onRetry={() => {
+                    setRetryCount((current) => current + 1);
+                }}
+                isRetrying={fetching}
+            />
+        );
     }
 
     if (!product) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF6EE]">
-                <p className="text-sm text-red-500">
-                    Produkt hittades inte
-                </p>
-
-                <ModalAlert
-                    modal={modal}
-                    onClose={() => setModal(null)}
-                />
-            </div>
+            <NotFound
+                title="Produkten hittades inte"
+                message="Produkten kanske har tagits bort eller så är länken felaktig."
+                actionLabel="Till alla produkter"
+                onAction={() => navigate("/admin")}
+            />
         );
     }
 

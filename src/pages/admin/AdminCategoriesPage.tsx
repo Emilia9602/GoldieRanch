@@ -1,11 +1,13 @@
 import AdminNav from "../../components/admin/AdminNav";
 import CategoryForm from "../../components/admin/CategoryForm";
 import CategoryList from "../../components/admin/CategoryList";
+import ErrorState from "../../components/loadingError/ErrorState";
+import Loading from "../../components/loadingError/Loading";
 
 import { useCategories } from "../../hooks/useCategories";
 
 export default function AdminCategoriesPage() {
-    const { data: categories, isLoading, refetch } = useCategories();
+    const { data: categories, isLoading, isError, isFetching, refetch } = useCategories();
 
     const allCategories = categories ?? [];
 
@@ -14,7 +16,19 @@ export default function AdminCategoriesPage() {
     );
 
     if (isLoading) {
-        return <p className="p-6">Laddar kategorier...</p>;
+        <Loading message="Laddar kategorier..." />
+    }
+
+    if (isError && !categories) {
+        return (
+            <ErrorState
+                message="Vi kunde inte hämta kategorierna just nu. Försök igen."
+                onRetry={() => {
+                    void refetch();
+                }}
+                isRetrying={isFetching}
+            />
+        );
     }
 
     return (
