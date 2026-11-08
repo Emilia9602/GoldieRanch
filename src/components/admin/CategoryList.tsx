@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { updateCategory, deleteCategory } from "../../services/productService";
 import type { Category } from "../../types/product.types";
+import type { ModalAlertData } from "./ModalAlert";
+import ModalAlert from "./ModalAlert";
 
 type Props = {
     categories: Category[];
@@ -13,6 +15,7 @@ export default function CategoryList({ categories, onChanged }: Props) {
     const [editName, setEditName] = useState("");
     const [editParentId, setEditParentId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
+    const [modal, setModal] = useState<ModalAlertData | null>(null);
 
     const parentCategories = categories.filter(
         (category) => category.parent_id === null
@@ -57,7 +60,12 @@ export default function CategoryList({ categories, onChanged }: Props) {
             (editParentId === null || !parentCategories.some(
                 (parent) => parent.id === editParentId))
         ) {
-            alert("Välj en giltig huvudkategori.");
+            setModal({
+                type: "info",
+                title: "Välj en huvudkategori",
+                message: "Du måste välja en giltig huvudkategori för underkategorin.",
+            });
+
             return;
         }
 
@@ -74,29 +82,31 @@ export default function CategoryList({ categories, onChanged }: Props) {
             cancelEditingCategory();
             await onChanged();
 
-            alert(
-                isSubcategory
+            setModal({
+                type: "success",
+                title: isSubcategory
                     ? "Underkategorin har uppdaterats!"
-                    : "Huvudkategorin har uppdaterats!"
-            );
+                    : "Huvudkategorin har uppdaterats!",
+                message: "Dina ändringar har sparats.",
+            });
         } catch (error) {
             console.error("Kunde inte uppdatera kategori:", error);
-            alert(
-                "Kunde inte uppdatera kategorin. Kontrollera att ändringen är giltig."
-            );
+            setModal({
+                type: "error",
+                title: "Kunde inte uppdatera kategorin",
+                message: "Kontrollera att ändringen är giltig och försök igen.",
+            });
         } finally {
             setLoading(false);
         }
     }
 
-    async function handleDeleteCategory(id: number, categoryName: string) {
-        const confirmed = window.confirm(
-            `Vill du verkligen ta bort underkategorin "${categoryName}"?`
-        );
-
-        if (!confirmed) return;
-
+    async function confirmDeleteCategory(id: number, categoryName: string) {
         setLoading(true);
+
+        setModal((current) =>
+            current ? { ...current, isLoading: true } : current
+        );
 
         try {
             await deleteCategory(id);
@@ -106,15 +116,36 @@ export default function CategoryList({ categories, onChanged }: Props) {
                 cancelEditingCategory();
             }
 
-            alert("Underkategorin har tagits bort!");
+            setModal({
+                type: "success",
+                title: "Underkategorin har tagits bort!",
+                message: `"${categoryName}" har tagits bort.`,
+            });
+
         } catch (error) {
             console.error("Kunde inte ta bort kategori:", error);
-            alert(
-                "Kunde inte ta bort kategorin. Kontrollera om några produkter använder den."
-            );
+
+            setModal({
+                type: "error",
+                title: "Kunde inte ta bort kategorin",
+                message: "Kontrollera om några produkter använder kategorin och försök igen.",
+            });
+
         } finally {
             setLoading(false);
         }
+    }
+
+    function handleDeleteCategory(id: number, categoryName: string) {
+        setModal({
+            type: "confirm",
+            title: "Ta bort underkategorin?",
+            message: `Vill du verkligen ta bort underkategorin "${categoryName}"?`,
+            confirmText: "Ta bort",
+            onConfirm: () => {
+                void confirmDeleteCategory(id, categoryName);
+            },
+        });
     }
 
     return (
@@ -392,6 +423,11 @@ export default function CategoryList({ categories, onChanged }: Props) {
                     Inga kategorier ännu.
                 </p>
             )}
+
+            <ModalAlert
+                modal={modal}
+                onClose={() => setModal(null)}
+            />
         </div>
     );
 }

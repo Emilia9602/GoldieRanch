@@ -3,10 +3,13 @@ import type { ProductWithVariants } from "../../types/product.types";
 import { useNavigate } from "react-router-dom";
 import { deleteProduct, getProductsWithVariants } from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
+import type { ModalAlertData } from "../../components/admin/ModalAlert";
+import ModalAlert from "../../components/admin/ModalAlert";
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState<ProductWithVariants[]>([]);
     const [loading, setLoading] = useState(true);
+    const [modal, setModal] = useState<ModalAlertData | null>(null);
 
     const navigate = useNavigate();
 
@@ -31,17 +34,45 @@ export default function AdminProductsPage() {
         loadProducts();
     }, []);
 
-    const handleDelete = async (id: number) => {
-        const confirmed = confirm("Ta bort denna produkt?");
-        if (!confirmed) return;
+    const confirmDelete = async (id: number) => {
+        setModal((current) =>
+            current ? { ...current, isLoading: true } : current
+        );
 
         try {
             await deleteProduct(id);
-            setProducts((prev) => prev.filter((p) => p.id !== id));
+
+            setProducts((prev) =>
+                prev.filter((p) => p.id !== id)
+            );
+
+            setModal({
+                type: "success",
+                title: "Produkten har tagits bort!",
+                message: "Produkten har tagits bort från sortimentet.",
+            });
+
         } catch (err) {
             console.log(err);
-            alert("Kunde inte ta bort produkt");
+
+            setModal({
+                type: "error",
+                title: "Kunde inte ta bort produkten",
+                message: "Något gick fel när produkten skulle tas bort. Försök igen.",
+            });
         }
+    };
+
+    const handleDelete = (id: number) => {
+        setModal({
+            type: "confirm",
+            title: "Ta bort produkten?",
+            message: "Är du säker på att du vill ta bort denna produkt?",
+            confirmText: "Ta bort",
+            onConfirm: () => {
+                void confirmDelete(id);
+            },
+        });
     };
 
     if (loading) {
@@ -125,6 +156,11 @@ export default function AdminProductsPage() {
                     )}
                 </div>
             </div>
+
+            <ModalAlert
+                modal={modal}
+                onClose={() => setModal(null)}
+            />
         </div>
     );
 }

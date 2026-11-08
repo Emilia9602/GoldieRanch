@@ -75,14 +75,37 @@ export default function LogoutButton({
                     >
                         <div className="w-full max-w-sm rounded-2xl border border-[#D9BE95]/50 bg-[#FAF6EE] p-6 shadow-2xl">
 
-                            <h2 className="text-lg font-semibold text-[#342D26]">
-                                Vill du logga ut?
-                            </h2>
+                            <div className="flex items-start gap-3">
 
-                            <p className="mt-2 text-sm text-[#6B625A]">
-                                Är du säker på att du vill logga ut från
-                                Goldie Ranch Admin?
-                            </p>
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EFE4D2] text-[#8C6843]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        <path d="M10 17l5-5-5-5" />
+                                        <path d="M15 12H3" />
+                                        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2 className="text-lg font-semibold text-[#342D26]">
+                                        Vill du logga ut?
+                                    </h2>
+
+                                    <p className="mt-2 text-sm leading-relaxed text-[#6B625A]">
+                                        Är du säker på att du vill logga?
+                                    </p>
+                                </div>
+
+                            </div>
 
                             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
 

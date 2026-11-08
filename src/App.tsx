@@ -16,10 +16,13 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Modaler istället för alert på delete
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida
+//Shop sidan - kunna välja kategori, först visa alla produkter
 //Första sidan, fixa som vi vill ha
 //Städa kod i admin, dela upp mer?
 //Hero på homepage?
 //Rabatt?
+//Behandlings sida, info
+//Presentkort - lägg in
 //Kontakt sida
 //Retur sida
 //Error, loading state bättre, komponenter, confim också

@@ -1,4 +1,7 @@
+import { useState } from "react";
 import type { ProductVariant } from "../../types/product.types";
+import type { ModalAlertData } from "./ModalAlert";
+import ModalAlert from "./ModalAlert";
 
 type Props = {
     variants: ProductVariant[];
@@ -15,6 +18,22 @@ type Props = {
 export default function ProductVariantsEditor({
     variants, loading, onAdd, onRemove, onChange,
 }: Props) {
+
+    const [modal, setModal] = useState<ModalAlertData | null>(null);
+
+    const handleRemove = (variant: ProductVariant) => {
+        setModal({
+            type: "confirm",
+            title: "Ta bort variant?",
+            message: "Är du säker på att du vill ta bort denna variant?",
+            confirmText: "Ta bort",
+            onConfirm: () => {
+                onRemove(variant);
+                setModal(null);
+            },
+        });
+    };
+
     return (
         <div className="mt-8 pt-6 border-t border-[#D9BE95]/40">
 
@@ -53,7 +72,7 @@ export default function ProductVariantsEditor({
                                 <button
                                     type="button"
                                     disabled={loading}
-                                    onClick={() => onRemove(variant)}
+                                    onClick={() => handleRemove(variant)}
                                     className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
                                 >
                                     Ta bort
@@ -180,6 +199,11 @@ export default function ProductVariantsEditor({
                     ))}
                 </div>
             )}
+
+            <ModalAlert
+                modal={modal}
+                onClose={() => setModal(null)}
+            />
         </div>
     )
 }
