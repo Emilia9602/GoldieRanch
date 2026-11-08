@@ -86,7 +86,7 @@ export default function MobileNavigation() {
                 className={`md:hidden fixed inset-x-0 bottom-0 z-50 transition-transform duration-300 ${open ? "translate-y-0" : "translate-y-full"
                     }`}
             >
-                <div className="max-w-md mx-auto bg-[#FAF6EE] rounded-t-[28px] border border-[#E5DFD5] shadow-[0_-10px_35px_rgba(44,36,28,0.18)] overflow-hidden">
+                <div className="max-w-md mx-auto max-h-[85dvh] flex flex-col bg-[#FAF6EE] rounded-t-[28px] border border-[#E5DFD5] shadow-[0_-10px_35px_rgba(44,36,28,0.18)] overflow-hidden">
 
                     <div className="pt-3 pb-2 flex justify-center">
                         <div className="w-12 h-1.5 bg-[#D8C7A8] rounded-full" />
@@ -124,7 +124,7 @@ export default function MobileNavigation() {
                         </button>
                     </div>
 
-                    <div className="px-5 py-5">
+                    <div className="px-5 py-5 min-h-0 overflow-y-auto overscroll-contain">
                         <span className="text-[11px] uppercase font-bold tracking-[0.25em] text-[#8C6843]">
                             Snabbval
                         </span>
@@ -273,27 +273,85 @@ export default function MobileNavigation() {
                                 <Link
                                     to="/about-us"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="flex items-center gap-3 px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-[18px] h-[18px] shrink-0 text-[#8C6843]"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                                        />
+                                        <circle cx="10" cy="7" r="4" />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+                                        />
+                                    </svg>
+
                                     Om oss
                                 </Link>
 
                                 <Link
                                     to="/contact"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="flex items-center gap-3 px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-[18px] h-[18px] shrink-0 text-[#8C6843]"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                        />
+                                    </svg>
+
                                     Kontakta oss
                                 </Link>
 
                                 <Link
                                     to="/returns"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="flex items-center gap-3 px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-[18px] h-[18px] shrink-0 text-[#8C6843]"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M9 14 4 9l5-5"
+                                        />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M4 9h10.5a5.5 5.5 0 0 1 0 11H13"
+                                        />
+                                    </svg>
+
                                     Retur & reklamation
                                 </Link>
-
                             </div>
                         </div>
 

@@ -14,6 +14,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 //Lägg till sök på desktop
 //Sök ska funka
 //Footer
+//Styla hamburgermenyn med alla flikar
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida
 //Shop sidan - kunna välja kategori, först visa alla produkter
