@@ -98,15 +98,15 @@ export default function MobileNavigation() {
                             <img
                                 src="/images/Logga.png"
                                 alt="Goldie Ranch"
-                                className="w-8 h-8 rounded-full object-contain"
+                                className="w-9 h-9 rounded-full object-contain"
                             />
 
                             <div className="flex flex-col">
-                                <span className="text-[10px] uppercase tracking-[0.25em] text-[#8C6843]">
+                                <span className="text-[11px] uppercase tracking-[0.25em] text-[#8C6843]">
                                     Goldie Ranch
                                 </span>
 
-                                <span className="text-[10px] uppercase tracking-wider font-medium text-[#342D26]">
+                                <span className="text-[11px] uppercase tracking-wider font-medium text-[#342D26]">
                                     Utforska
                                 </span>
                             </div>
@@ -125,7 +125,7 @@ export default function MobileNavigation() {
                     </div>
 
                     <div className="px-5 py-5">
-                        <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#8C6843]">
+                        <span className="text-[11px] uppercase font-bold tracking-[0.25em] text-[#8C6843]">
                             Snabbval
                         </span>
 
@@ -151,7 +151,7 @@ export default function MobileNavigation() {
                                     />
                                 </svg>
 
-                                <span className="text-[10px] uppercase tracking-wider font-semibold">
+                                <span className="text-[11px] uppercase tracking-wider font-semibold">
                                     Shop
                                 </span>
                             </Link>
@@ -176,7 +176,7 @@ export default function MobileNavigation() {
                                     />
                                 </svg>
 
-                                <span className="text-[10px] uppercase tracking-wider font-semibold">
+                                <span className="text-[11px] uppercase tracking-wider font-semibold">
                                     Behandlingar
                                 </span>
                             </Link>
@@ -202,7 +202,7 @@ export default function MobileNavigation() {
                                     <circle cx="7.125" cy="7.125" r=".75" fill="currentColor" />
                                 </svg>
 
-                                <span className="text-[10px] uppercase tracking-wider font-semibold">
+                                <span className="text-[11px] uppercase tracking-wider font-semibold">
                                     Rea
                                 </span>
                             </Link>
@@ -249,12 +249,12 @@ export default function MobileNavigation() {
                                 <Link
                                     to="/shop"
                                     onClick={closeMenu}
-                                    className="block text-xs font-semibold text-[#6F5D48] hover:text-[#342D26] transition-colors"
+                                    className="block text-sm font-semibold text-[#6F5D48] hover:text-[#342D26] transition-colors"
                                 >
                                     Alla produkter
                                 </Link>
 
-                                <p className="mt-2 text-xs text-[#8C6843]">
+                                <p className="mt-2 text-sm text-[#8C6843]">
                                     Kategorier kommer här när sortimentet är uppbyggt.
                                 </p>
                             </div>
@@ -273,7 +273,7 @@ export default function MobileNavigation() {
                                 <Link
                                     to="/about-us"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
                                     Om oss
                                 </Link>
@@ -281,7 +281,7 @@ export default function MobileNavigation() {
                                 <Link
                                     to="/contact"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
                                     Kontakta oss
                                 </Link>
@@ -289,7 +289,7 @@ export default function MobileNavigation() {
                                 <Link
                                     to="/returns"
                                     onClick={closeMenu}
-                                    className="block px-3.5 py-3 text-xs text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
+                                    className="block px-3.5 py-3 text-sm text-[#6F5D48] hover:bg-[#D9BE95]/15 hover:text-[#342D26] transition-colors"
                                 >
                                     Retur & reklamation
                                 </Link>
@@ -324,7 +324,7 @@ export default function MobileNavigation() {
                         to="/"
                         className="flex flex-col items-center justify-center min-w-[44px] text-[#6B625A] hover:text-[#342D26] transition-colors"
                     >
-                        <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
+                        <span className="text-[11px] uppercase font-semibold tracking-wider mt-1">
                             Hem
                         </span>
 
@@ -338,7 +338,7 @@ export default function MobileNavigation() {
                         to="/shop"
                         className="flex flex-col items-center justify-center min-w-[44px] text-[#6B625A] hover:text-[#342D26] transition-colors"
                     >
-                        <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
+                        <span className="text-[11px] uppercase font-semibold tracking-wider mt-1">
                             Shop
                         </span>
 
@@ -352,7 +352,7 @@ export default function MobileNavigation() {
                         to="/contact"
                         className="flex flex-col items-center justify-center min-w-[44px] text-[#6B625A] hover:text-[#342D26] transition-colors"
                     >
-                        <span className="text-[10px] uppercase font-semibold tracking-wider mt-1">
+                        <span className="text-[11px] uppercase font-semibold tracking-wider mt-1">
                             Kontakt
                         </span>
 
@@ -371,7 +371,7 @@ export default function MobileNavigation() {
                             <span className="text-base leading-none">☰</span>
                         </div>
 
-                        <span className="text-[9px] uppercase font-bold tracking-wider mt-0.5">
+                        <span className="text-[10px] uppercase font-bold tracking-wider mt-0.5">
                             Meny
                         </span>
                     </button>
