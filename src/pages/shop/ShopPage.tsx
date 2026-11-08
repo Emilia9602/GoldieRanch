@@ -1,11 +1,26 @@
-import ProductCard from "../components/ProductCard";
-import { useProducts } from "../hooks/useProducts";
+import ErrorState from "../../components/loadingError/ErrorState";
+import Loading from "../../components/loadingError/Loading";
+import ProductCard from "../../components/shop/ProductCard";
+import { useProducts } from "../../hooks/useProducts";
 
 export default function Shop() {
-    const { data: products, isLoading, error } = useProducts();
+    const { data: products, isLoading, error, refetch, isFetching } = useProducts();
 
-    if (isLoading) return <p className="p-6">Laddar produkter...</p>;
-    if (error) return <p className="p-6">Något gick fel</p>;
+    if (isLoading) {
+        return <Loading message="Laddar produkter..." />;
+    }
+
+    if (error) {
+        return (
+            <ErrorState
+                message="Vi kunde inte hämta produkterna just nu. Försök igen."
+                onRetry={() => {
+                    void refetch();
+                }}
+                isRetrying={isFetching}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen bg-[#FAF6EE] pt-10 pb-24 md:pb-10 text-[#342D26]">

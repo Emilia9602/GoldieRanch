@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signIn } from "../services/auth";
+import { signIn } from "../../services/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -22,7 +22,7 @@ export default function LoginPage() {
             if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Någit gick fel");
+                setError("Något gick fel");
             }
         } finally {
             setLoading(false);

@@ -8,3 +8,25 @@ export type ProductInsert =
 
 export type ProductUpdate =
     Database["public"]["Tables"]["products"]["Update"];
+
+export type ProductVariant =
+    Database["public"]["Tables"]["product_variants"]["Row"];
+
+export type ProductVariantInsert =
+    Database["public"]["Tables"]["product_variants"]["Insert"];
+
+export type ProductVariantUpdate =
+    Database["public"]["Tables"]["product_variants"]["Update"];
+
+export type ProductWithVariants = Product & {
+    product_variants: ProductVariant[];
+};
+
+export type Category =
+    Database["public"]["Tables"]["categories"]["Row"];
+
+export type CategoryInsert =
+    Database["public"]["Tables"]["categories"]["Insert"];
+
+export type CategoryUpdate =
+    Database["public"]["Tables"]["categories"]["Update"];

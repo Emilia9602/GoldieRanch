@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Product } from "../types/product.types"
+import type { Product } from "../../types/product.types"
 
 //Använd denna senare
 
