@@ -13,7 +13,6 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Lägg till sök på desktop
 //Sök ska funka
 //Footer
-//Modaler istället för alert på delete
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida
 //Shop sidan - kunna välja kategori, först visa alla produkter
@@ -25,9 +24,7 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 //Presentkort - lägg in
 //Kontakt sida
 //Retur sida
-//Error, loading state bättre, komponenter, confim också
 //Ska det heta "shop" eller något annat?
-//Annat än alerts
 //Not found page
 //Login ska ha egen länk till oss att komma direkt till
 //Badges, mest populär, nyhet eller liknande. Lägg in logik direkt för det
