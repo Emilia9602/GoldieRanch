@@ -283,11 +283,44 @@ export default function AddProductPage() {
                                                 className="w-full aspect-square object-cover rounded-lg border border-[#D9BE95]/50"
                                             />
 
-                                            <p className="text-xs text-[#6B625A]">
+                                            <p className="text-xs text-[#8C6843]">
                                                 {index === 0
                                                     ? "Huvudbild"
                                                     : `Bild ${index + 1}`}
                                             </p>
+
+                                            {index !== 0 && (
+                                                <button
+                                                    type="button"
+                                                    disabled={loading}
+                                                    onClick={() => {
+                                                        setImageFiles((current) => {
+                                                            const selected = current[index];
+
+                                                            if (!selected) return current;
+
+                                                            return [
+                                                                selected,
+                                                                ...current.filter((_, i) => i !== index),
+                                                            ];
+                                                        });
+
+                                                        setPreviews((current) => {
+                                                            const selected = current[index];
+
+                                                            if (!selected) return current;
+
+                                                            return [
+                                                                selected,
+                                                                ...current.filter((_, i) => i !== index),
+                                                            ];
+                                                        });
+                                                    }}
+                                                    className="text-xs px-2 py-1 rounded-lg border border-[#8C6843]/40 text-[#8C6843] hover:bg-[#EFE4D2]"
+                                                >
+                                                    Gör till huvudbild
+                                                </button>
+                                            )}
 
                                             <button
                                                 type="button"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { ProductVariant, ProductWithVariants } from "../../types/product.types";
 import { addVariant, deleteVariant, getProductWithVariantsById, updateProduct, updateVariant } from "../../services/productService";
@@ -7,15 +7,22 @@ import { uploadImage } from "../../services/storageService";
 import ProductVariantsEditor from "../../components/admin/ProductVariantsEditor";
 import ProductCategorySelect from "../../components/admin/ProductCategorySelect";
 
+type ProductImage = {
+    id: string;
+    url: string;
+    file: File | null;
+};
+
 export default function EditProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState<ProductWithVariants | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
+    const [images, setImages] = useState<ProductImage[]>([]);
     const [variants, setVariants] = useState<ProductVariant[]>([]);
     const [deletedVariantIds, setDeletedVariantIds] = useState<number[]>([]);
+
+    const imagesRef = useRef<ProductImage[]>([]);
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -27,7 +34,19 @@ export default function EditProductPage() {
                 const data = await getProductWithVariantsById(Number(id));
                 setProduct(data);
                 setVariants(data.product_variants ?? []);
-                setPreview(data.image ?? null);
+
+                const imageUrls = [
+                    data.image,
+                    ...(data.images ?? []),
+                ].filter((url): url is string => Boolean(url));
+
+                setImages(
+                    imageUrls.map((url) => ({
+                        id: crypto.randomUUID(),
+                        url,
+                        file: null,
+                    }))
+                );
             } catch (err) {
                 console.log(err);
                 alert("Kunde ej hämta produkt");
@@ -38,6 +57,20 @@ export default function EditProductPage() {
 
         loadProduct();
     }, [id]);
+
+    useEffect(() => {
+        imagesRef.current = images;
+    }, [images]);
+
+    useEffect(() => {
+        return () => {
+            imagesRef.current.forEach((image) => {
+                if (image.file) {
+                    URL.revokeObjectURL(image.url);
+                }
+            });
+        };
+    }, []);
 
     const handleAddVariant = () => {
         if (!product) return;
@@ -85,17 +118,19 @@ export default function EditProductPage() {
         setLoading(true);
 
         try {
-            let imageUrl = product.image;
-
-            if (imageFile) {
-                imageUrl = await uploadImage(imageFile);
-            }
-
+            const imageUrls = await Promise.all(
+                images.map((image) =>
+                    image.file
+                        ? uploadImage(image.file)
+                        : Promise.resolve(image.url)
+                )
+            );
             await updateProduct(product.id, {
                 name: product.name,
                 description: product.description,
                 price: product.price,
-                image: imageUrl,
+                image: imageUrls[0] ?? null,
+                images: imageUrls.slice(1),
                 category_id: product.category_id,
             });
 
@@ -126,12 +161,28 @@ export default function EditProductPage() {
 
             const updatedData = await getProductWithVariantsById(product.id);
 
+            images.forEach((image) => {
+                if (image.file) {
+                    URL.revokeObjectURL(image.url);
+                }
+            });
+
             setProduct(updatedData);
             setVariants(updatedData.product_variants ?? []);
             setDeletedVariantIds([]);
 
-            setImageFile(null);
-            setPreview(updatedData.image ?? null);
+            const updatedImageUrls = [
+                updatedData.image,
+                ...(updatedData.images ?? []),
+            ].filter((url): url is string => Boolean(url));
+
+            setImages(
+                updatedImageUrls.map((url) => ({
+                    id: crypto.randomUUID(),
+                    url,
+                    file: null,
+                }))
+            );
 
             alert("Uppdaterad");
         } catch (err) {
@@ -224,58 +275,125 @@ export default function EditProductPage() {
                 />
 
                 <div className="mb-3 mt-4">
+
                     <label className="block text-xs uppercase tracking-wider text-[#8C6843] mb-2">
-                        Bild
+                        Produktbilder
                     </label>
 
                     <input
                         type="file"
                         accept="image/*"
                         id="file-upload"
+                        multiple
                         disabled={loading}
                         onChange={(e) => {
-                            const file = e.target.files?.[0] || null;
-                            setImageFile(file);
+                            const files = Array.from(e.target.files ?? []);
 
-                            if (file) {
-                                setPreview(URL.createObjectURL(file));
-                            }
+                            const newImages = files.map((file) => ({
+                                id: crypto.randomUUID(),
+                                url: URL.createObjectURL(file),
+                                file,
+                            }));
+
+                            setImages((current) => [...current, ...newImages]);
+
+                            e.target.value = "";
                         }}
                         className="hidden"
-                        placeholder="Image of product"
                     />
 
                     <label
                         htmlFor="file-upload"
-                        className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-[#D9BE95]/60 rounded-xl bg-[#FAF6EE] cursor-pointer hover:bg-[#F3EBDD] transition">
+                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl transition cursor-pointer
+            ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#F3EBDD]"}
+            ${images.length > 0 ? "border-[#CFB58C]" : "border-[#D9BE95]/60 bg-[#FAF6EE]"}`}
+                    >
                         <span className="text-sm font-semibold text-[#8C6843]">
-                            {preview ? "Byt bild" : "Ladda upp bild"}
+                            {images.length > 0
+                                ? "Lägg till fler bilder"
+                                : "Ladda upp produktbilder"}
                         </span>
 
-                        <span
-                            className="text-xs text-[#A89F94] mt-1">
+                        <span className="text-xs text-[#A89F94] mt-1">
                             PNG, JPG
                         </span>
                     </label>
 
-                    {preview && (
+                    {images.length > 0 && (
                         <div className="mt-3">
-                            <p className="text-xs text-[#8C6843] mb-2 uppercase tracking-wider">
-                                Förhandsvisning
+
+                            <p className="text-xs text-[#8C6843] uppercase tracking-wider text-center mb-3">
+                                Produktbilder
                             </p>
 
-                            <img
-                                src={preview}
-                                className="w-32 h-32 object-cover rounded-lg border border-[#D9BE95]/50"
-                            />
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+
+                                {images.map((image, index) => (
+                                    <div
+                                        key={image.id}
+                                        className="flex flex-col items-center gap-2"
+                                    >
+                                        <img
+                                            src={image.url}
+                                            alt={`Produktbild ${index + 1}`}
+                                            className="w-full aspect-square object-cover rounded-lg border border-[#D9BE95]/50"
+                                        />
+
+                                        <p className="text-xs text-[#8C6843]">
+                                            {index === 0
+                                                ? "Huvudbild"
+                                                : `Bild ${index + 1}`}
+                                        </p>
+
+                                        {index !== 0 && (
+                                            <button
+                                                type="button"
+                                                disabled={loading}
+                                                onClick={() => {
+                                                    setImages((current) => {
+                                                        const selected = current[index];
+
+                                                        if (!selected) return current;
+
+                                                        return [
+                                                            selected,
+                                                            ...current.filter(
+                                                                (_, i) => i !== index
+                                                            ),
+                                                        ];
+                                                    });
+                                                }}
+                                                className="text-xs px-2 py-1 rounded-lg border border-[#8C6843]/40 text-[#8C6843] hover:bg-[#EFE4D2]"
+                                            >
+                                                Gör till huvudbild
+                                            </button>
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            disabled={loading}
+                                            onClick={() => {
+                                                if (image.file) {
+                                                    URL.revokeObjectURL(image.url);
+                                                }
+
+                                                setImages((current) =>
+                                                    current.filter(
+                                                        (item) => item.id !== image.id
+                                                    )
+                                                );
+                                            }}
+                                            className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
+                                        >
+                                            Ta bort
+                                        </button>
+                                    </div>
+                                ))}
+
+                            </div>
                         </div>
                     )}
 
-                    {imageFile && (
-                        <p className="text-xs text-[#6B625A] mt-2">
-                            {imageFile.name}
-                        </p>
-                    )}
                 </div>
 
                 <ProductVariantsEditor
