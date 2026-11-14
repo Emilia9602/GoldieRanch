@@ -10,10 +10,12 @@ import AdminProductsPage from "./pages/admin/AdminProductsPage";
 import AddProductPage from "./pages/admin/AddProductPage";
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ContactPage from "./pages/shop/ContactPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
 //Footer
+//Vanliga frågor?
 //Styla hamburgermenyn med alla flikar
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida
@@ -44,6 +46,7 @@ function App() {
           {/*Jobbar på just nu*/}
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
           <Route path="/admin" element={
             <ProtectedRoute>

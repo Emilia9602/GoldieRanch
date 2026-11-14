@@ -25,7 +25,7 @@ export default function Shop() {
     return (
         <div className="min-h-screen bg-[#FAF6EE] pt-10 pb-24 md:pb-10 text-[#342D26]">
 
-            <div className="max-w-5xl mx-auto px-4">
+            <div className="max-w-6xl mx-auto px-4">
 
                 <div className="text-center mb-10">
                     <span className="block text-[10px] uppercase tracking-[0.35em] text-[#8C6843]">
