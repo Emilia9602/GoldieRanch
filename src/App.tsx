@@ -11,10 +11,11 @@ import AddProductPage from "./pages/admin/AddProductPage";
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ContactPage from "./pages/shop/ContactPage";
+import Footer from "./components/shop/Footer";
 
 //Lägg till sök på desktop
 //Sök ska funka
-//Footer
+//Footer - fixa!
 //Vanliga frågor?
 //Styla hamburgermenyn med alla flikar
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
@@ -26,7 +27,6 @@ import ContactPage from "./pages/shop/ContactPage";
 //Rabatt? Rea
 //Behandlings sida, info
 //Presentkort - lägg in
-//Kontakt sida
 //Retur sida
 //Ska det heta "shop" eller något annat?
 //Login ska ha egen länk till oss att komma direkt till
@@ -43,7 +43,6 @@ function App() {
 
           <Route path="/" element={<ComingSoonPage />} />
 
-          {/*Jobbar på just nu*/}
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -80,6 +79,8 @@ function App() {
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+
+        <Footer />
       </AuthProvider>
     </BrowserRouter>
   )
