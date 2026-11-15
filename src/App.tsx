@@ -13,6 +13,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ContactPage from "./pages/shop/ContactPage";
 import Footer from "./components/shop/Footer";
 import ReturnsPage from "./pages/shop/ReturnsPage";
+import PrivacyPolicyPage from "./pages/shop/PrivacyPolicyPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -49,6 +50,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/returns" element={<ReturnsPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
 
           <Route path="/admin" element={
             <ProtectedRoute>
