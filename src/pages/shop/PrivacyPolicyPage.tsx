@@ -82,7 +82,7 @@ function PrivacyPolicyPage() {
                                 goldieranch96@gmail.com
                             </a>
                             <br />
-                            Postadress: [Fyll i företagets postadress]
+                            Postadress: Västerstad 7181, 242 97 Hörby
                         </p>
                     </PrivacySection>
 

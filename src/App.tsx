@@ -16,6 +16,7 @@ import ReturnsPage from "./pages/shop/ReturnsPage";
 import PrivacyPolicyPage from "./pages/shop/PrivacyPolicyPage";
 
 //Lägg till sök på desktop
+//Kontakt - ljus - kanske bara mail men jag ansvarar?
 //Sök ska funka
 //Footer - fixa!
 //Vanliga frågor?
@@ -26,7 +27,7 @@ import PrivacyPolicyPage from "./pages/shop/PrivacyPolicyPage";
 //Första sidan, fixa som vi vill ha
 //Städa kod i admin, dela upp mer?
 //Hero på homepage?
-//Rabatt? Rea
+//Rabatt? Rea - Ingen retur? Kolla lagar
 //Behandlings sida, info
 //Presentkort - lägg in
 //Retur sida
