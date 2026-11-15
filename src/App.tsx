@@ -12,6 +12,7 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ContactPage from "./pages/shop/ContactPage";
 import Footer from "./components/shop/Footer";
+import ReturnsPage from "./pages/shop/ReturnsPage";
 
 //Lägg till sök på desktop
 //Sök ska funka
@@ -28,6 +29,7 @@ import Footer from "./components/shop/Footer";
 //Behandlings sida, info
 //Presentkort - lägg in
 //Retur sida
+//Frakt tid - hur lång?
 //Ska det heta "shop" eller något annat?
 //Login ska ha egen länk till oss att komma direkt till
 //Badges, populär, nyhet, rea, slutsåld, limited addition. Lägg in logik  för det
@@ -46,6 +48,7 @@ function App() {
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/returns" element={<ReturnsPage />} />
 
           <Route path="/admin" element={
             <ProtectedRoute>
