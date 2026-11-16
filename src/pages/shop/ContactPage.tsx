@@ -13,11 +13,9 @@ function ContactPage() {
 
     return (
         <main className="min-h-screen bg-[#FAF6EE] pt-10 pb-24 md:pb-10 text-[#342D26]">
-
             <div className="max-w-5xl mx-auto px-4">
 
                 <section className="text-center max-w-2xl mx-auto mb-12">
-
                     <span className="block text-xs uppercase tracking-[0.25em] text-[#8C6843]">
                         Goldie Ranch
                     </span>
@@ -33,13 +31,12 @@ function ContactPage() {
                         behandlingar? Vi hjälper dig gärna!
                         Hör av dig så ser vi till att du får hjälp av rätt person.
                     </p>
-
                 </section>
 
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
 
+                    {/* E-post */}
                     <div className={`${cardClass} items-center text-center`}>
-
                         <div className={iconClass}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -69,14 +66,14 @@ function ContactPage() {
 
                         <a
                             href={`mailto:${contactEmail}`}
-                            className={`text-base font-semibold text-[#8C6843] transition-all duration-300 hover:text-[#6F4E2E] hover:-translate-y-0.5 ${linkFocusClass}`}                        >
+                            className={`text-base font-semibold text-[#8C6843] transition-all duration-300 hover:text-[#6F4E2E] hover:-translate-y-0.5 ${linkFocusClass}`}
+                        >
                             {contactEmail}
                         </a>
-
                     </div>
 
+                    {/* Följ oss & hör av dig */}
                     <div className={`${cardClass} items-center text-center`}>
-
                         <div className={iconClass}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +129,6 @@ function ContactPage() {
                                 >
                                     <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.43 23.1 10.23 24v-8.44H7.08v-3.49h3.15V9.41c0-3.1 1.84-4.82 4.66-4.82 1.35 0 2.76.24 2.76.24v3.04h-1.55c-1.53 0-2.01.96-2.01 1.94v2.33h3.42l-.55 3.49h-2.87V24C19.57 23.1 24 18.1 24 12.07z" />
                                 </svg>
-
                                 <span>Skicka meddelande</span>
                             </a>
 
@@ -155,7 +151,6 @@ function ContactPage() {
                                     <path d="M16 11.37a4 4 0 1 1-7.9 1.26 4 4 0 0 1 7.9-1.26z" />
                                     <circle cx="17.5" cy="6.5" r="1.1" />
                                 </svg>
-
                                 <span>Instagram</span>
                             </a>
 
@@ -174,20 +169,14 @@ function ContactPage() {
                                 >
                                     <path d="M12.52.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
                                 </svg>
-
                                 <span>TikTok</span>
                             </a>
-
                         </div>
-
                     </div>
-
                 </section>
 
                 <section className="mt-14">
-
                     <div className="text-center mb-7 max-w-2xl mx-auto">
-
                         <span className="block text-xs uppercase tracking-[0.25em] text-[#8C6843]">
                             Vi hjälper dig gärna
                         </span>
@@ -203,13 +192,12 @@ function ContactPage() {
                             ansvarsområden. Här hittar du vem du ska kontakta
                             beroende på vad din fråga gäller.
                         </p>
-
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
 
+                        {/* Hästprodukter */}
                         <div className={`${cardClass} text-center items-center`}>
-
                             <div className={iconClass}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -249,15 +237,20 @@ function ContactPage() {
 
                                 <a
                                     href={`mailto:${contactEmail}`}
-                                    className={`text-base font-semibold text-[#8C6843] transition-all duration-300 hover:text-[#6F4E2E] hover:-translate-y-0.5 ${linkFocusClass}`}                                >
+                                    className={`text-base font-semibold text-[#8C6843] transition-all duration-300 hover:text-[#6F4E2E] hover:-translate-y-0.5 ${linkFocusClass}`}
+                                >
                                     Mejla oss →
                                 </a>
                             </div>
-
                         </div>
 
-                        <div className={`${cardClass} text-center items-center`}>
+                        {/*
+                        Ljus & doftpinnar – tillfälligt dolt.
 
+                        Avkommentera hela kortet nedan om ljusverksamheten
+                        ska visas på kontaktsidan igen.
+
+                        <div className={`${cardClass} text-center items-center`}>
                             <div className={iconClass}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -297,11 +290,11 @@ function ContactPage() {
                                     073-854 95 54
                                 </a>
                             </div>
-
                         </div>
+                        */}
 
+                        {/* Behandlingar */}
                         <div className={`${cardClass} text-center items-center`}>
-
                             <div className={iconClass}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -341,21 +334,16 @@ function ContactPage() {
                                     073-854 95 55
                                 </a>
                             </div>
-
                         </div>
-
                     </div>
-
                 </section>
 
                 <section className="mt-12 text-center max-w-2xl mx-auto">
-
                     <p className="text-base leading-relaxed text-[#6B5D48]">
                         Vi ser fram emot att höra från dig. Varmt välkommen till Goldie Ranch!
                     </p>
 
                     <div className="w-20 h-[3px] mx-auto mt-5 bg-gradient-to-r from-transparent via-[#D9BE95] to-transparent opacity-90 rounded-full" />
-
                 </section>
 
             </div>
