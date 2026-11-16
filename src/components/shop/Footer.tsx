@@ -10,9 +10,6 @@ function Footer() {
     const socialLinkClass =
         "flex items-center gap-2 text-sm text-[#6B5D48] hover:text-[#6F4E2E] transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8C6843] rounded-sm";
 
-    const emailLinkClass =
-        "text-sm text-[#6B5D48] hover:text-[#342D26] hover:font-semibold underline underline-offset-4 decoration-[#D9BE95] decoration-1 hover:decoration-[#8C6843] transition-all duration-300 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8C6843] rounded-sm";
-
     return (
         <footer className="bg-[#FAF7F2] border-t border-[#D9BE95]/50">
             <div className="max-w-6xl mx-auto px-6 pt-12 pb-8">
@@ -100,40 +97,9 @@ function Footer() {
                                 Leverans
                             </p>
 
-                            <div className="flex items-center justify-center sm:justify-start gap-2">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    className="w-4 h-4 text-[#8C6843] shrink-0"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375A1.125 1.125 0 0 1 2.25 17.625V6.375A1.125 1.125 0 0 1 3.375 5.25h11.25A1.125 1.125 0 0 1 15.75 6.375v12.375m-6 0h6m0 0a1.5 1.5 0 0 0 3 0m0 0a1.5 1.5 0 0 1 3 0m-3 0h-3m3-6h3.75v-3.75h-3.75m0 3.75V8.25"
-                                    />
-                                </svg>
-
-                                <p className="text-sm text-[#6B5D48]">
-                                    Vi skickar beställningar med PostNord inom Sverige.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="mt-6">
-                            <p className="text-sm font-semibold text-[#342D26] mb-2">
-                                Frågor?
+                            <p className="text-sm leading-relaxed text-[#6B5D48]">
+                                Vi skickar beställningar med PostNord inom Sverige.
                             </p>
-
-                            <a
-                                href="mailto:goldieranch96@gmail.com"
-                                className={emailLinkClass}
-                            >
-                                goldieranch96@gmail.com
-                            </a>
                         </div>
                     </div>
 
@@ -210,19 +176,31 @@ function Footer() {
 
                 {/* Företagsuppgifter */}
                 <div className="border-t border-[#D9BE95]/50 mt-10 pt-6 text-center">
-                    <p className="text-xs leading-relaxed text-[#6B5D48]">
-                        Emilia and Ellinor Showhorses HB
-                        <span className="mx-2">·</span>
+
+                    <p className="text-sm leading-relaxed text-[#6B5D48]">
+                        <span className="font-semibold text-[#342D26]">
+                            Emilia and Ellinor Showhorses HB
+                        </span>
+
+                        <span className="mx-2">|</span>
+
                         Org.nr 969785-0023
                     </p>
 
-                    <p className="text-xs text-[#6B5D48] mt-2">
-                        Postadress: Västerstad 7181, 242 97 Hörby
+                    <p className="text-sm leading-relaxed text-[#6B5D48] mt-2">
+                        Västerstad 7181, 242 97 Hörby, Sverige
+
+                        <span className="mx-2">|</span>
+
+                        <a
+                            href="mailto:goldieranch96@gmail.com"
+                            className="text-[#6B5D48] hover:text-[#342D26] underline underline-offset-4 decoration-[#D9BE95] decoration-1 hover:decoration-[#8C6843] transition-colors duration-300 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8C6843] rounded-sm"
+                        >
+                            goldieranch96@gmail.com
+                        </a>
                     </p>
 
-                    {/* TODO: Lägg till företagets telefonnummer om det behövs. */}
-
-                    <div className="border-t border-[#D9BE95]/50 mt-6 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="mt-6 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="text-xs text-[#6B5D48] text-center">
                             © {currentYear} Goldie Ranch. Alla rättigheter förbehållna.
                         </p>

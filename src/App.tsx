@@ -28,6 +28,8 @@ import PrivacyPolicyPage from "./pages/shop/PrivacyPolicyPage";
 //Städa kod i admin, dela upp mer?
 //Hero på homepage?
 //Rabatt? Rea - Ingen retur? Kolla lagar
+//Ljuskalkylatorn - lägg in senare så att priset räknas med moms, vinst m.m
+//Ljuskalkylatorn - Role admin kunna se priser, role staff ej priser
 //Behandlings sida, info
 //Presentkort - lägg in
 //Retur sida
