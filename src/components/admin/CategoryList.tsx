@@ -3,6 +3,10 @@ import { updateCategory, deleteCategory } from "../../services/productService";
 import type { Category } from "../../types/product.types";
 import type { ModalAlertData } from "./ModalAlert";
 import ModalAlert from "./ModalAlert";
+import { useCategoryProductCounts } from "../../hooks/useCategories";
+import CategoryItem from "./categories/CategoryItem";
+import SubcategoryItem from "./categories/SubcategoryItem";
+import CategoryEditForm from "./categories/CategoryEditForm";
 
 type Props = {
     categories: Category[];
@@ -14,12 +18,36 @@ export default function CategoryList({ categories, onChanged }: Props) {
     const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null);
     const [editName, setEditName] = useState("");
     const [editParentId, setEditParentId] = useState<number | null>(null);
+    const [editSortOrder, setEditSortOrder] = useState("0");
     const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState<ModalAlertData | null>(null);
+
+    const {
+        data: productCounts = {},
+        refetch: refetchProductCounts,
+    } = useCategoryProductCounts();
 
     const parentCategories = categories.filter(
         (category) => category.parent_id === null
     );
+
+    function getProductCount(categoryId: number) {
+        return productCounts[categoryId] ?? 0;
+    }
+
+    function getTotalProductCount(category: Category) {
+        const children = categories.filter(
+            (child) => child.parent_id === category.id
+        );
+
+        return (
+            getProductCount(category.id) +
+            children.reduce(
+                (total, child) => total + getProductCount(child.id),
+                0
+            )
+        );
+    }
 
     function toggleCategory(id: number) {
         setExpandedCategories((current) =>
@@ -33,17 +61,20 @@ export default function CategoryList({ categories, onChanged }: Props) {
         setEditingCategoryId(category.id);
         setEditName(category.name);
         setEditParentId(category.parent_id);
+        setEditSortOrder(String(category.sort_order ?? 0));
 
         if (category.parent_id !== null) {
             setExpandedCategories((current) =>
                 current.includes(category.parent_id!)
                     ? current
-                    : [...current, category.parent_id!]);
+                    : [...current, category.parent_id!]
+            );
         } else {
             setExpandedCategories((current) =>
                 current.includes(category.id)
                     ? current
-                    : [...current, category.id]);
+                    : [...current, category.id]
+            );
         }
     }
 
@@ -51,19 +82,48 @@ export default function CategoryList({ categories, onChanged }: Props) {
         setEditingCategoryId(null);
         setEditName("");
         setEditParentId(null);
+        setEditSortOrder("0");
     }
 
-    async function handleUpdateCategory(category: Category, isSubcategory: boolean) {
+    async function handleUpdateCategory(
+        category: Category,
+        isSubcategory: boolean
+    ) {
+        if (!editName.trim()) {
+            setModal({
+                type: "info",
+                title: "Ange ett kategorinamn",
+                message: "Kategorinamnet får inte vara tomt.",
+            });
+
+            return;
+        }
 
         if (
             isSubcategory &&
-            (editParentId === null || !parentCategories.some(
-                (parent) => parent.id === editParentId))
+            (editParentId === null ||
+                !parentCategories.some(
+                    (parent) => parent.id === editParentId
+                ))
         ) {
             setModal({
                 type: "info",
                 title: "Välj en huvudkategori",
-                message: "Du måste välja en giltig huvudkategori för underkategorin.",
+                message:
+                    "Du måste välja en giltig huvudkategori för underkategorin.",
+            });
+
+            return;
+        }
+
+        const sortOrder = Number(editSortOrder);
+
+        if (!Number.isInteger(sortOrder) || sortOrder < 0) {
+            setModal({
+                type: "info",
+                title: "Ogiltig sorteringsordning",
+                message:
+                    "Sorteringsordningen måste vara ett heltal som är 0 eller högre.",
             });
 
             return;
@@ -73,7 +133,8 @@ export default function CategoryList({ categories, onChanged }: Props) {
 
         try {
             await updateCategory(category.id, {
-                name: editName,
+                name: editName.trim(),
+                sort_order: sortOrder,
                 ...(isSubcategory
                     ? { parent_id: editParentId }
                     : {}),
@@ -91,17 +152,19 @@ export default function CategoryList({ categories, onChanged }: Props) {
             });
         } catch (error) {
             console.error("Kunde inte uppdatera kategori:", error);
+
             setModal({
                 type: "error",
                 title: "Kunde inte uppdatera kategorin",
-                message: "Kontrollera att ändringen är giltig och försök igen.",
+                message:
+                    "Kontrollera att ändringen är giltig och försök igen.",
             });
         } finally {
             setLoading(false);
         }
     }
 
-    async function confirmDeleteCategory(id: number, categoryName: string) {
+    async function confirmDeleteCategory(category: Category) {
         setLoading(true);
 
         setModal((current) =>
@@ -109,41 +172,82 @@ export default function CategoryList({ categories, onChanged }: Props) {
         );
 
         try {
-            await deleteCategory(id);
+            await deleteCategory(category.id);
             await onChanged();
+            await refetchProductCounts();
 
-            if (editingCategoryId === id) {
+            if (editingCategoryId === category.id) {
                 cancelEditingCategory();
             }
 
             setModal({
                 type: "success",
-                title: "Underkategorin har tagits bort!",
-                message: `"${categoryName}" har tagits bort.`,
+                title:
+                    category.parent_id === null
+                        ? "Huvudkategorin har tagits bort!"
+                        : "Underkategorin har tagits bort!",
+                message: `"${category.name}" har tagits bort.`,
             });
-
         } catch (error) {
             console.error("Kunde inte ta bort kategori:", error);
 
             setModal({
                 type: "error",
                 title: "Kunde inte ta bort kategorin",
-                message: "Kontrollera om några produkter använder kategorin och försök igen.",
+                message:
+                    "Något gick fel när kategorin skulle tas bort. Kontrollera om produkter eller underkategorier fortfarande använder den.",
             });
-
         } finally {
             setLoading(false);
         }
     }
 
-    function handleDeleteCategory(id: number, categoryName: string) {
+    function handleDeleteCategory(category: Category) {
+        const children = categories.filter(
+            (child) => child.parent_id === category.id
+        );
+
+        const productCount = getTotalProductCount(category);
+        const reasons: string[] = [];
+
+        if (productCount > 0) {
+            reasons.push(
+                `"${category.name}" har ${productCount} ${productCount === 1 ? "produkt" : "produkter"
+                } kopplade till sig eller sina underkategorier. Flytta produkterna till en annan kategori först.`
+            );
+        }
+
+        if (children.length > 0) {
+            reasons.push(
+                `Kategorin har ${children.length} ${children.length === 1
+                    ? "underkategori"
+                    : "underkategorier"
+                }. Ta bort eller flytta underkategorierna först.`
+            );
+        }
+
+        if (reasons.length > 0) {
+            setModal({
+                type: "info",
+                title: "Kategorin kan inte tas bort",
+                message: reasons.join("\n\n"),
+            });
+
+            return;
+        }
+
+        const isSubcategory = category.parent_id !== null;
+
         setModal({
             type: "confirm",
-            title: "Ta bort underkategorin?",
-            message: `Vill du verkligen ta bort underkategorin "${categoryName}"?`,
+            title: isSubcategory
+                ? "Ta bort underkategorin?"
+                : "Ta bort huvudkategorin?",
+            message: `Vill du verkligen ta bort ${isSubcategory ? "underkategorin" : "huvudkategorin"
+                } "${category.name}"?`,
             confirmText: "Ta bort",
             onConfirm: () => {
-                void confirmDeleteCategory(id, categoryName);
+                void confirmDeleteCategory(category);
             },
         });
     }
@@ -169,257 +273,103 @@ export default function CategoryList({ categories, onChanged }: Props) {
                             editingCategoryId === category.id;
 
                         return (
-                            <div
+                            <CategoryItem
                                 key={category.id}
-                                className="rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE] overflow-hidden"
+                                category={category}
+                                productCount={getTotalProductCount(category)}
+                                isExpanded={isExpanded}
+                                loading={loading}
+                                onToggle={() =>
+                                    toggleCategory(category.id)
+                                }
+                                onEdit={() =>
+                                    startEditingCategory(category)
+                                }
+                                onDelete={() =>
+                                    handleDeleteCategory(category)
+                                }
                             >
-                                <div className="flex items-center gap-2 p-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => toggleCategory(category.id)}
-                                        className="flex-1 min-w-0 flex items-center gap-2 text-left"
-                                    >
-                                        <span className="text-[#8C6843]">
-                                            {isExpanded ? "▾" : "▸"}
-                                        </span>
-
-                                        <span className="text-sm font-semibold">
-                                            {category.name}
-                                        </span>
-
-                                        <span className="text-xs text-[#6B625A]">
-                                            ({children.length})
-                                        </span>
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        disabled={loading}
-                                        onClick={() => startEditingCategory(category)}
-                                        className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
-                                    >
-                                        Redigera
-                                    </button>
-                                </div>
-
-                                {isExpanded && (
-                                    <div className="border-t border-[#D9BE95]/40 p-3 space-y-3">
-                                        {isEditing && (
-                                            <form
-                                                onSubmit={(e) => {
-                                                    e.preventDefault();
-                                                    void handleUpdateCategory(
-                                                        category,
-                                                        false
-                                                    );
-                                                }}
-                                                className="space-y-2"
-                                            >
-                                                <label
-                                                    htmlFor={`edit-category-${category.id}`}
-                                                    className="block text-xs uppercase tracking-wider text-[#8C6843]"
-                                                >
-                                                    Kategorinamn
-                                                </label>
-
-                                                <input
-                                                    id={`edit-category-${category.id}`}
-                                                    value={editName}
-                                                    onChange={(e) => setEditName(e.target.value)}
-                                                    required
-                                                    className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-[#FAF7F2] text-sm outline-none focus:border-[#D9BE95]"
-                                                />
-
-                                                <p className="text-xs text-[#6B625A]">
-                                                    Slug ändras inte:{" "}
-                                                    {category.slug}
-                                                </p>
-
-
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        type="submit"
-                                                        disabled={loading}
-                                                        className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
-                                                    >
-                                                        {loading ? "Sparar..." : "Spara"}
-                                                    </button>
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={cancelEditingCategory}
-                                                        className="text-xs px-3 py-1 rounded-lg border border-[#D9BE95]/50 hover:bg-[#EAE4D9]"
-                                                    >
-                                                        Avbryt
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        )}
-
-                                        <p className="text-xs text-[#6B625A]">
-                                            Slug: {category.slug}
-                                        </p>
-
-                                        {children.length > 0 ? (
-                                            children.map((child) => {
-                                                const isEditingChild = editingCategoryId === child.id;
-
-                                                return (
-                                                    <div
-                                                        key={child.id}
-                                                        className="pl-3 py-2 border-l-2 border-[#D9BE95]/60 space-y-3"
-                                                    >
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="flex-1 min-w-0">
-                                                                <p className="text-sm font-medium">
-                                                                    {child.name}
-                                                                </p>
-
-                                                                <p className="text-xs text-[#6B625A]">
-                                                                    {child.slug}
-                                                                </p>
-                                                            </div>
-
-                                                            <button
-                                                                type="button"
-                                                                disabled={loading}
-                                                                onClick={() => startEditingCategory(child)}
-                                                                className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
-                                                            >
-                                                                Redigera
-                                                            </button>
-
-                                                            <button
-                                                                type="button"
-                                                                disabled={loading}
-                                                                onClick={() => void handleDeleteCategory(child.id, child.name)}
-                                                                className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100 disabled:opacity-50"
-                                                            >
-                                                                Ta bort
-                                                            </button>
-                                                        </div>
-
-                                                        {isEditingChild && (
-                                                            <form
-                                                                onSubmit={(e) => {
-                                                                    e.preventDefault();
-                                                                    void handleUpdateCategory(child, true);
-                                                                }}
-                                                                className="space-y-3 rounded-lg bg-[#FAF7F2] border border-[#D9BE95]/40 p-3"
-                                                            >
-                                                                <div>
-                                                                    <label
-                                                                        htmlFor={`edit-child-name-${child.id}`}
-                                                                        className="block text-xs uppercase tracking-wider text-[#8C6843] mb-1"
-                                                                    >
-                                                                        Underkategorins namn
-                                                                    </label>
-
-                                                                    <input
-                                                                        id={`edit-child-name-${child.id}`}
-                                                                        value={editName}
-                                                                        onChange={(e) => setEditName(e.target.value)}
-                                                                        required
-                                                                        className="w-full px-3 py-2 rounded-lg border border-[#D9BE95]/50 bg-white text-sm outline-none focus:border-[#D9BE95]"
-                                                                    />
-                                                                </div>
-
-                                                                <div>
-                                                                    <label
-                                                                        htmlFor={`edit-child-parent-${child.id}`}
-                                                                        className="block text-xs uppercase tracking-wider text-[#8C6843] mb-1"
-                                                                    >
-                                                                        Huvudkategori
-                                                                    </label>
-
-
-                                                                    <div className="relative">
-                                                                        <select
-                                                                            id={`edit-child-parent-${child.id}`}
-                                                                            value={editParentId ?? ""}
-                                                                            onChange={(e) =>
-                                                                                setEditParentId(
-                                                                                    e.target.value ? Number(e.target.value) : null
-                                                                                )
-                                                                            }
-                                                                            required
-                                                                            className="w-full appearance-none px-3 py-2 pr-9 rounded-lg border border-[#D9BE95]/50 bg-white text-sm text-[#342D26] outline-none focus:border-[#8C6843]"
-                                                                        >
-                                                                            <option value="">
-                                                                                Välj huvudkategori
-                                                                            </option>
-
-                                                                            {parentCategories.map((parent) => (
-                                                                                <option
-                                                                                    key={parent.id}
-                                                                                    value={parent.id}
-                                                                                >
-                                                                                    {parent.name}
-                                                                                </option>
-                                                                            ))}
-                                                                        </select>
-
-                                                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#8C6843]">
-                                                                            <svg
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                width="16"
-                                                                                height="16"
-                                                                                viewBox="0 0 24 24"
-                                                                                fill="none"
-                                                                                stroke="currentColor"
-                                                                                strokeWidth="1.8"
-                                                                                strokeLinecap="round"
-                                                                                strokeLinejoin="round"
-                                                                            >
-                                                                                <path d="m6 9 6 6 6-6" />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <p className="text-xs text-[#6B625A]">
-                                                                    Slug ändras
-                                                                    inte:{" "}
-                                                                    {child.slug}
-                                                                </p>
-
-                                                                <div className="flex gap-2">
-                                                                    <button
-                                                                        type="submit"
-                                                                        disabled={loading || editParentId === null}
-                                                                        className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] text-[#342D26] font-semibold hover:bg-[#CFB58C] disabled:opacity-50"
-                                                                    >
-                                                                        {loading ? "Sparar..." : "Spara"}
-                                                                    </button>
-
-                                                                    <button
-                                                                        type="button"
-                                                                        disabled={loading}
-                                                                        onClick={cancelEditingCategory}
-                                                                        className="text-xs px-3 py-1 rounded-lg border border-[#D9BE95]/50 hover:bg-[#EAE4D9] disabled:opacity-50"
-                                                                    >
-                                                                        Avbryt
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })
-                                        ) : (
-                                            <p className="text-xs text-[#6B625A]">
-                                                Inga underkategorier ännu.
-                                            </p>
-                                        )}
-                                    </div>
+                                {isEditing && (
+                                    <CategoryEditForm
+                                        category={category}
+                                        isSubcategory={false}
+                                        parentCategories={parentCategories}
+                                        name={editName}
+                                        parentId={editParentId}
+                                        sortOrder={editSortOrder}
+                                        loading={loading}
+                                        onNameChange={setEditName}
+                                        onParentChange={setEditParentId}
+                                        onSortOrderChange={setEditSortOrder}
+                                        onSave={() => {
+                                            void handleUpdateCategory(
+                                                category,
+                                                false
+                                            );
+                                        }}
+                                        onCancel={cancelEditingCategory}
+                                    />
                                 )}
-                            </div>
+
+                                <p className="text-xs text-[#8C6843]">
+                                    Slug: {category.slug}
+                                </p>
+
+                                {children.length > 0 ? (
+                                    children.map((child) => {
+                                        const isEditingChild =
+                                            editingCategoryId === child.id;
+
+                                        return (
+                                            <SubcategoryItem
+                                                key={child.id}
+                                                category={child}
+                                                productCount={getProductCount(
+                                                    child.id
+                                                )}
+                                                loading={loading}
+                                                onEdit={() =>
+                                                    startEditingCategory(child)
+                                                }
+                                                onDelete={() =>
+                                                    handleDeleteCategory(child)
+                                                }
+                                            >
+                                                {isEditingChild && (
+                                                    <CategoryEditForm
+                                                        category={child}
+                                                        isSubcategory={true}
+                                                        parentCategories={parentCategories}
+                                                        name={editName}
+                                                        parentId={editParentId}
+                                                        sortOrder={editSortOrder}
+                                                        loading={loading}
+                                                        onNameChange={setEditName}
+                                                        onParentChange={setEditParentId}
+                                                        onSortOrderChange={setEditSortOrder}
+                                                        onSave={() => {
+                                                            void handleUpdateCategory(
+                                                                child,
+                                                                true
+                                                            );
+                                                        }}
+                                                        onCancel={cancelEditingCategory}
+                                                    />
+                                                )}
+                                            </SubcategoryItem>
+                                        );
+                                    })
+                                ) : (
+                                    <p className="text-xs text-[#8C6843]">
+                                        Inga underkategorier ännu.
+                                    </p>
+                                )}
+                            </CategoryItem>
                         );
                     })}
                 </div>
             ) : (
-                <p className="text-sm text-[#6B625A]">
+                <p className="text-sm text-[#8C6843]">
                     Inga kategorier ännu.
                 </p>
             )}

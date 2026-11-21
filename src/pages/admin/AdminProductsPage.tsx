@@ -1,7 +1,14 @@
+
 import { useEffect, useState } from "react";
-import type { ProductWithVariants } from "../../types/product.types";
+import type {
+    ProductVariant,
+    ProductWithVariants,
+} from "../../types/product.types";
 import { useNavigate } from "react-router-dom";
-import { deleteProduct, getProductsWithVariants } from "../../services/productService";
+import {
+    deleteProduct,
+    getProductsWithVariants,
+} from "../../services/productService";
 import AdminNav from "../../components/admin/AdminNav";
 import type { ModalAlertData } from "../../components/admin/ModalAlert";
 import ModalAlert from "../../components/admin/ModalAlert";
@@ -20,6 +27,7 @@ export default function AdminProductsPage() {
         try {
             setLoading(true);
             setLoadError(false);
+
             const data = await getProductsWithVariants();
 
             const sorted = data.sort(
@@ -32,14 +40,13 @@ export default function AdminProductsPage() {
         } catch (err) {
             console.log(err);
             setLoadError(true);
-
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        loadProducts();
+        void loadProducts();
     }, []);
 
     const confirmDelete = async (id: number) => {
@@ -59,14 +66,14 @@ export default function AdminProductsPage() {
                 title: "Produkten har tagits bort!",
                 message: "Produkten har tagits bort från sortimentet.",
             });
-
         } catch (err) {
             console.log(err);
 
             setModal({
                 type: "error",
                 title: "Kunde inte ta bort produkten",
-                message: "Något gick fel när produkten skulle tas bort. Försök igen.",
+                message:
+                    "Något gick fel när produkten skulle tas bort. Försök igen.",
             });
         }
     };
@@ -75,7 +82,8 @@ export default function AdminProductsPage() {
         setModal({
             type: "confirm",
             title: "Ta bort produkten?",
-            message: "Är du säker på att du vill ta bort denna produkt?",
+            message:
+                "Är du säker på att du vill ta bort denna produkt?",
             confirmText: "Ta bort",
             onConfirm: () => {
                 void confirmDelete(id);
@@ -100,7 +108,6 @@ export default function AdminProductsPage() {
 
     return (
         <div className="min-h-screen bg-[#FAF6EE] p-6 pb-24 text-[#342D26]">
-
             <AdminNav />
 
             <div className="max-w-xl mx-auto bg-[#FAF7F2] border border-[#D9BE95]/50 rounded-2xl p-6 shadow-sm">
@@ -108,60 +115,86 @@ export default function AdminProductsPage() {
                     <h1 className="text-xl font-semibold mb-1">
                         Alla produkter
                     </h1>
+
                     <p className="text-xs uppercase tracking-[0.25em] text-[#8C6843] mb-6">
                         Admin översikt
                     </p>
 
                     <div className="space-y-3">
-                        {products.map((p) => (
-                            <div
-                                key={p.id}
-                                className="flex items-center justify-between p-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
-                            >
-                                <div className="flex items-center gap-3">
-                                    {p.image && (
-                                        <img
-                                            src={p.image}
-                                            className="w-12 h-12 rounded-lg object-cover"
-                                        />
-                                    )}
+                        {products.map((p) => {
+                            const standardVariant =
+                                p.product_variants.find(
+                                    (variant: ProductVariant) =>
+                                        !variant.color && !variant.size
+                                );
 
-                                    <div>
-                                        <p className="font-semibold text-sm">
-                                            {p.name}
-                                        </p>
-                                        <p className="text-xs text-[#6B625A]">
-                                            {p.price} kr
-                                        </p>
-                                        <p className="text-xs text-[#6B625A]">
-                                            {p.product_variants.length === 0
-                                                ? "Inga varianter"
-                                                : p.product_variants.length === 1
-                                                    ? "1 variant"
-                                                    : `${p.product_variants.length} varianter`}
-                                        </p>
+                            const realVariants =
+                                p.product_variants.filter(
+                                    (variant: ProductVariant) =>
+                                        variant.color || variant.size
+                                );
+
+                            return (
+                                <div
+                                    key={p.id}
+                                    className="flex items-center justify-between p-3 rounded-xl border border-[#D9BE95]/50 bg-[#FAF6EE]"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        {p.image && (
+                                            <img
+                                                src={p.image}
+                                                alt={`Produktbild av ${p.name}`}
+                                                className="w-12 h-12 rounded-lg object-cover"
+                                            />
+                                        )}
+
+                                        <div>
+                                            <p className="font-semibold text-sm">
+                                                {p.name}
+                                            </p>
+
+                                            <p className="text-xs text-[#6B625A]">
+                                                {p.price} kr
+                                            </p>
+
+                                            {realVariants.length === 0 ? (
+                                                <p className="text-xs text-[#6B625A]">
+                                                    SKU: {standardVariant?.sku ?? "Saknas"}
+                                                </p>
+                                            ) : (
+                                                <p className="text-xs text-[#6B625A]">
+                                                    {realVariants.length === 1
+                                                        ? "1 variant"
+                                                        : `${realVariants.length} varianter`}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    `/admin/products/${p.id}`
+                                                )
+                                            }
+                                            className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C]"
+                                        >
+                                            Redigera
+                                        </button>
+
+                                        <button
+                                            onClick={() =>
+                                                handleDelete(p.id)
+                                            }
+                                            className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
+                                        >
+                                            Ta bort
+                                        </button>
                                     </div>
                                 </div>
-
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() =>
-                                            navigate(`/admin/products/${p.id}`)
-                                        }
-                                        className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C]"
-                                    >
-                                        Redigera
-                                    </button>
-
-                                    <button
-                                        onClick={() => handleDelete(p.id)}
-                                        className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
-                                    >
-                                        Ta bort
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {products.length === 0 && (

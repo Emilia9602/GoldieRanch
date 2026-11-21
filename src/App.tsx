@@ -20,6 +20,7 @@ import PrivacyPolicyPage from "./pages/shop/PrivacyPolicyPage";
 //Sök ska funka
 //Footer - fixa!
 //Vanliga frågor?
+//Lägg till i admin "brand" ex Goldie Ranch
 //Styla hamburgermenyn med alla flikar
 //Navigering för admin - ordrar senare? Vad behövs för säkerhet?
 //En produktsida

@@ -3,11 +3,16 @@ import CategoryForm from "../../components/admin/CategoryForm";
 import CategoryList from "../../components/admin/CategoryList";
 import ErrorState from "../../components/loadingError/ErrorState";
 import Loading from "../../components/loadingError/Loading";
-
 import { useCategories } from "../../hooks/useCategories";
 
 export default function AdminCategoriesPage() {
-    const { data: categories, isLoading, isError, isFetching, refetch } = useCategories();
+    const {
+        data: categories,
+        isLoading,
+        isError,
+        isFetching,
+        refetch,
+    } = useCategories();
 
     const allCategories = categories ?? [];
 
@@ -16,7 +21,7 @@ export default function AdminCategoriesPage() {
     );
 
     if (isLoading) {
-        <Loading message="Laddar kategorier..." />
+        return <Loading message="Laddar kategorier..." />;
     }
 
     if (isError && !categories) {
