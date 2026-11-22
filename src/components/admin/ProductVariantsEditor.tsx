@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import type { ProductVariant } from "../../types/product.types";
 import type { ModalAlertData } from "./ModalAlert";
@@ -16,9 +17,12 @@ type Props = {
 };
 
 export default function ProductVariantsEditor({
-    variants, loading, onAdd, onRemove, onChange,
+    variants,
+    loading,
+    onAdd,
+    onRemove,
+    onChange,
 }: Props) {
-
     const [modal, setModal] = useState<ModalAlertData | null>(null);
 
     const handleRemove = (variant: ProductVariant) => {
@@ -46,17 +50,23 @@ export default function ProductVariantsEditor({
                     type="button"
                     disabled={loading}
                     onClick={onAdd}
-                    className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C]"
+                    className="text-xs px-3 py-1 rounded-lg bg-[#D9BE95] border border-[#D9BE95]/50 font-semibold hover:bg-[#CFB58C] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     + Lägg till variant
                 </button>
             </div>
 
-            <p className="text-xs text-[#8C6843] mb-4">
-                Lägg till färg, storlek, pris, lager och SKU.
+            <p className="text-xs mt-4 text-[#8C6843] mb-4">
+                Lägg till varianter när produkten finns i olika färger,
+                storlekar eller andra utföranden. Varje variant måste ha
+                ett eget SKU.
             </p>
 
-            {variants.length > 0 && (
+            {variants.length === 0 ? (
+                <p className="text-xs text-[#8C6843] italic">
+                    Inga valbara varianter tillagda.
+                </p>
+            ) : (
                 <div className="space-y-4">
                     {variants.map((variant) => (
                         <div
@@ -73,7 +83,7 @@ export default function ProductVariantsEditor({
                                     type="button"
                                     disabled={loading}
                                     onClick={() => handleRemove(variant)}
-                                    className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100"
+                                    className="text-xs px-3 py-1 rounded-lg border border-red-300 text-red-600 hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Ta bort
                                 </button>
@@ -132,6 +142,8 @@ export default function ProductVariantsEditor({
 
                                     <input
                                         type="number"
+                                        min="0"
+                                        step="0.01"
                                         value={variant.price ?? ""}
                                         disabled={loading}
                                         onChange={(e) =>
@@ -155,6 +167,8 @@ export default function ProductVariantsEditor({
 
                                     <input
                                         type="number"
+                                        min="0"
+                                        step="1"
                                         value={variant.stock ?? ""}
                                         disabled={loading}
                                         onChange={(e) =>
@@ -176,12 +190,13 @@ export default function ProductVariantsEditor({
                             <div className="mt-3">
 
                                 <label className="block text-xs text-[#8C6843] mb-2">
-                                    SKU
+                                    SKU *
                                 </label>
 
                                 <input
                                     value={variant.sku ?? ""}
                                     disabled={loading}
+                                    aria-required="true"
                                     onChange={(e) =>
                                         onChange(
                                             variant.id,
@@ -194,7 +209,6 @@ export default function ProductVariantsEditor({
                                 />
 
                             </div>
-
                         </div>
                     ))}
                 </div>
@@ -205,5 +219,5 @@ export default function ProductVariantsEditor({
                 onClose={() => setModal(null)}
             />
         </div>
-    )
+    );
 }

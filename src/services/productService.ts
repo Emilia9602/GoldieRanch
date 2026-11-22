@@ -112,11 +112,31 @@ export async function getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
         .from("categories")
         .select("*")
-        .order("name");
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true });
 
     if (error) throw error;
 
-    return data;
+    return data ?? [];
+}
+
+export async function getCategoryProductCounts(): Promise<Record<number, number>> {
+    const { data, error } = await supabase
+        .from("products")
+        .select("category_id");
+
+    if (error) throw error;
+
+    const counts: Record<number, number> = {};
+
+    (data ?? []).forEach((product) => {
+        if (product.category_id !== null) {
+            counts[product.category_id] =
+                (counts[product.category_id] ?? 0) + 1;
+        }
+    });
+
+    return counts;
 }
 
 export async function addCategory(category: CategoryInsert) {
